@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ekomo-mai | あなたの中にも光があるよ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --deep: #3a2848; --text: #4a3858; --soft: #8a7898;
+    --gold: #d4a840; --pink: #e8a0c0; --purple: #b8a0d8;
+  }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f9e8f0 0%, #ede8f9 50%, #fdf7e8 100%);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+    color: var(--text);
+    display: flex; align-items: center; justify-content: center;
+    padding: 30px 20px;
+  }
+  .wrap { max-width: 440px; width: 100%; text-align: center; }
+  .logo { font-size: 11px; letter-spacing: .4em; color: var(--soft); text-transform: uppercase; margin-bottom: 14px; }
+  h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 26px; font-weight: 300; letter-spacing: .25em;
+    color: var(--deep); margin-bottom: 10px;
+  }
+  .tagline {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px; letter-spacing: .2em; color: var(--gold);
+    margin-bottom: 40px;
+  }
+  .doors { display: flex; flex-direction: column; gap: 14px; }
+  .door {
+    display: block; text-decoration: none;
+    background: rgba(255,255,255,.7);
+    border: 1px solid rgba(184,160,216,.3);
+    border-radius: 18px;
+    padding: 22px 24px;
+    transition: all .3s ease;
+    box-shadow: 0 4px 18px rgba(184,160,216,.12);
+  }
+  .door:hover { transform: translateY(-3px); box-shadow: 0 8px 26px rgba(184,160,216,.25); }
+  .door-emoji { font-size: 30px; display: block; margin-bottom: 8px; }
+  .door-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 16px; letter-spacing: .12em; color: var(--deep); margin-bottom: 4px;
+  }
+  .door-sub { font-size: 11px; letter-spacing: .1em; color: var(--soft); line-height: 1.8; }
+  footer { margin-top: 44px; font-size: 10px; letter-spacing: .25em; color: var(--soft); opacity: .7; line-height: 2; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">ekomo-mai · AI studio</div>
+  <h1>ekomo-mai</h1>
+  <div class="tagline">あなたの中にも光があるよ。</div>
+
+  <div class="doors">
+    <a class="door" href="omamori/">
+      <span class="door-emoji">🕊️</span>
+      <div class="door-title">大人だって褒められたい</div>
+      <div class="door-sub">天然石の妖精が、今日のあなたにそっと言葉を届けます</div>
+    </a>
+    <a class="door" href="inori/">
+      <span class="door-emoji">🌌</span>
+      <div class="door-title">祈りの記憶 〜ヒーリング組曲〜</div>
+      <div class="door-sub">レムリアとムーの叡智をめぐる、全10曲の音の旅</div>
+    </a>
+    <a class="door" href="kokokoro/">
+      <span class="door-emoji">🐣</span>
+      <div class="door-title">ここコロの部屋</div>
+      <div class="door-sub">もっと褒められたい日は、こちらへどうぞ</div>
+    </a>
+  </div>
+
+  <footer>
+    ekomo-mai kaori · AI studio<br>
+    「人生の主役は、あなたです。」
+  </footer>
+</div>
+</body>
+</html>

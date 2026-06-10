@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大人だって褒められたい — ekomo-mai</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pastel-pink: #f9e8f0;
+    --pastel-purple: #ede8f9;
+    --pastel-yellow: #fdf7e8;
+    --pastel-blue: #e8f3f9;
+    --soft-pink: #e8a0c0;
+    --soft-purple: #b8a0d8;
+    --soft-gold: #d4a840;
+    --deep: #3a2848;
+    --text: #4a3858;
+    --soft: #8a7898;
+  }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--pastel-pink) 0%, var(--pastel-purple) 50%, var(--pastel-yellow) 100%);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* 星のきらきら背景 */
+  .bg-sparkle {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse at 10% 20%, rgba(232,160,192,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(184,160,216,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(253,247,232,0.1) 0%, transparent 60%);
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ヘッダー */
+  .header {
+    text-align: center;
+    margin-bottom: 24px;
+    animation: fadeDown 0.8s ease forwards;
+  }
+
+  .logo {
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--soft);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--deep);
+    margin-bottom: 6px;
+  }
+
+  .title-en {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--soft-pink);
+  }
+
+  /* 迎える一言（おかえり・お誕生日） */
+  .greeting {
+    text-align: center;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    color: var(--soft);
+    letter-spacing: 0.15em;
+    margin-bottom: 20px;
+    min-height: 1em;
+    opacity: 0;
+    animation: breatheIn 2s ease 0.3s forwards;
+  }
+
+  /* あなたの石バッジ */
+  .home-stone-badge {
+    text-align: center;
+    font-size: 11px;
+    color: var(--soft);
+    letter-spacing: 0.15em;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: breatheIn 2s ease 0.5s forwards;
+  }
+  .home-stone-badge span { color: var(--soft-purple); }
+
+  /* 今日の石カード */
+  .stone-card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 32px 28px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(232,160,192,0.3);
+    box-shadow: 0 8px 32px rgba(184,160,216,0.15);
+    animation: fadeUp 0.8s ease 0.2s both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stone-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    border-radius: 24px 24px 0 0;
+    background: var(--card-gradient, linear-gradient(90deg, #e8a0c0, #b8a0d8));
+    transition: background 0.5s ease;
+  }
+
+  .stone-label {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--soft);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .stone-label::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: rgba(184,160,216,0.3);
+  }
+
+  .character-area {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .character-emoji {
+    font-size: 56px;
+    line-height: 1;
+    flex-shrink: 0;
+    filter: drop-shadow(0 4px 8px rgba(184,160,216,0.3));
+    transition: transform 0.3s ease;
+  }
+
+  .character-emoji:hover {
+    transform: scale(1.1) rotate(-5deg);
+  }
+
+  .character-info { flex: 1; }
+
+  .character-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--deep);
+    margin-bottom: 4px;
+    letter-spacing: 0.1em;
+  }
+
+  .character-role {
+    font-size: 11px;
+    color: var(--soft);
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+
+  .character-flower {
+    font-size: 11px;
+    color: var(--soft-pink);
+    letter-spacing: 0.1em;
+  }
+
+  /* メッセージ */
+  .message-box {
+    background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.3));
+    border-radius: 16px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    border: 0.5px solid rgba(184,160,216,0.25);
+    position: relative;
+  }
+
+  .message-quote {
+    font-size: 32px;
+    color: var(--soft-purple);
+    opacity: 0.4;
+    font-family: serif;
+    line-height: 0.5;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .message-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 2;
+    color: var(--deep);
+    letter-spacing: 0.05em;
+  }
+
+  /* ⑤ ひと呼吸 ── 言葉は2秒かけて静かに浮かび上がる */
+  .breathe { opacity: 0; animation: breatheIn 2s ease forwards; }
+  @keyframes breatheIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .breathe, .greeting, .home-stone-badge { animation: none; opacity: 1; }
+    .stone-card, .header, .team-card, .footer { animation: none; opacity: 1; }
+  }
+
+  .message-sub {
+    font-size: 12px;
+    color: var(--soft);
+    line-height: 1.8;
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  /* ④ 言葉のしおり ボタン */
+  .bookmark-row {
+    text-align: right;
+    margin-bottom: 16px;
+  }
+  .btn-bookmark {
+    background: none;
+    border: none;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--soft-purple);
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 50px;
+    transition: background 0.3s ease;
+  }
+  .btn-bookmark:hover { background: rgba(184,160,216,0.12); }
+
+  /* 今日のラッキーアイテム */
+  .lucky-box {
+    background: rgba(255,255,255,0.5);
+    border-radius: 14px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 0.5px solid rgba(212,168,64,0.3);
+  }
+
+  .lucky-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--soft-gold);
+    white-space: nowrap;
+  }
+
+  .lucky-item {
+    font-size: 13px;
+    color: var(--text);
+    letter-spacing: 0.05em;
+  }
+
+  /* ボタン */
+  .btn-next {
+    width: 100%;
+    background: linear-gradient(135deg, var(--soft-pink), var(--soft-purple));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 32px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(184,160,216,0.3);
+  }
+
+  .btn-next:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(184,160,216,0.4);
+  }
+
+  .btn-next:active { transform: translateY(0); }
+
+  /* ⑥ あなたの石（誕生日・任意） */
+  .birthday-card {
+    background: rgba(255,255,255,0.6);
+    border-radius: 20px;
+    padding: 24px;
+    text-align: center;
+    border: 0.5px solid rgba(184,160,216,0.25);
+    margin-bottom: 20px;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+  .birthday-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    color: var(--soft);
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+  .birthday-note {
+    font-size: 11px;
+    color: var(--soft);
+    line-height: 1.9;
+    margin-bottom: 16px;
+  }
+  .birthday-selects {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .birthday-selects select {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: rgba(255,255,255,0.8);
+    border: 0.5px solid rgba(184,160,216,0.4);
+    border-radius: 12px;
+    padding: 10px 14px;
+  }
+  .birthday-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .btn-soft {
+    background: linear-gradient(135deg, var(--soft-pink), var(--soft-purple));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 24px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .btn-soft:hover { transform: translateY(-1px); }
+  .btn-skip {
+    background: none;
+    border: 0.5px solid rgba(138,120,152,0.4);
+    color: var(--soft);
+    border-radius: 50px;
+    padding: 10px 24px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+  }
+
+  /* ③ 優しい記録 ── 会えた日の灯（仮実装・Q5確定待ち） */
+  .lights-card {
+    background: rgba(255,255,255,0.6);
+    border-radius: 20px;
+    padding: 22px 24px;
+    text-align: center;
+    border: 0.5px solid rgba(212,168,64,0.25);
+    margin-bottom: 20px;
+    animation: fadeUp 0.8s ease 0.5s both;
+  }
+  .lights-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12px;
+    color: var(--soft);
+    letter-spacing: 0.25em;
+    margin-bottom: 14px;
+  }
+  .lights-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  .light-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #f5d98a 0%, #e8c060 60%, rgba(232,192,96,0.2) 100%);
+    box-shadow: 0 0 6px rgba(232,192,96,0.6);
+    animation: glow 3s ease-in-out infinite;
+  }
+  .light-dot:nth-child(2n) { animation-delay: 1s; }
+  .light-dot:nth-child(3n) { animation-delay: 2s; }
+  @keyframes glow {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) { .light-dot { animation: none; } }
+  .lights-note {
+    font-size: 10px;
+    color: var(--soft);
+    letter-spacing: 0.1em;
+    margin-top: 12px;
+    opacity: 0.8;
+  }
+
+  /* ④ しおりの引き出し */
+  .bookmarks-card {
+    background: rgba(255,255,255,0.6);
+    border-radius: 20px;
+    padding: 22px 24px;
+    border: 0.5px solid rgba(184,160,216,0.25);
+    margin-bottom: 20px;
+    animation: fadeUp 0.8s ease 0.55s both;
+  }
+  .bookmarks-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12px;
+    color: var(--soft);
+    letter-spacing: 0.25em;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .bookmarks-note {
+    font-size: 10px;
+    color: var(--soft);
+    text-align: center;
+    opacity: 0.8;
+    margin-bottom: 12px;
+  }
+  .bookmark-item {
+    background: rgba(255,255,255,0.55);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 0.5px solid rgba(184,160,216,0.2);
+    position: relative;
+  }
+  .bookmark-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--deep);
+  }
+  .bookmark-meta {
+    font-size: 10px;
+    color: var(--soft);
+    margin-top: 6px;
+    letter-spacing: 0.1em;
+  }
+  .bookmark-remove {
+    position: absolute;
+    top: 10px; right: 12px;
+    background: none; border: none;
+    color: rgba(138,120,152,0.5);
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .bookmarks-empty {
+    font-size: 11px;
+    color: var(--soft);
+    text-align: center;
+    padding: 8px 0;
+    opacity: 0.8;
+  }
+
+  /* チームメッセージ */
+  .team-card {
+    background: rgba(255,255,255,0.6);
+    border-radius: 20px;
+    padding: 24px 24px;
+    text-align: center;
+    border: 0.5px solid rgba(184,160,216,0.25);
+    animation: fadeUp 0.8s ease 0.6s both;
+  }
+
+  .team-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    color: var(--soft);
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+  }
+
+  .team-icons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .team-member { text-align: center; }
+
+  .team-icon {
+    font-size: 24px;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .team-name {
+    font-size: 10px;
+    color: var(--soft);
+    letter-spacing: 0.1em;
+  }
+
+  .team-quote {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    color: var(--soft-gold);
+    letter-spacing: 0.1em;
+    line-height: 2;
+  }
+
+  /* 簡易版の案内 */
+  .lite-invite {
+    text-align: center;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12px;
+    color: var(--soft-gold);
+    letter-spacing: 0.15em;
+    line-height: 2;
+    margin-bottom: 20px;
+    animation: fadeUp 0.8s ease 0.6s both;
+  }
+
+  /* フッター */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--soft);
+    opacity: 0.6;
+    animation: fadeUp 0.8s ease 0.8s both;
+  }
+
+  /* アニメーション */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="bg-sparkle"></div>
+<div class="container">
+
+  <div class="header">
+    <div class="logo">ekomo-mai · AI studio</div>
+    <div class="title">大人だって褒められたい</div>
+    <div class="title-en">you deserve to be praised ✦</div>
+  </div>
+
+  <!-- ⑧ 迎える一言（おかえり・⑦お誕生日はここに） -->
+  <div class="greeting" id="greeting"></div>
+
+  <!-- ⑥ あなたの石バッジ -->
+  <div class="home-stone-badge hidden" id="homeStoneBadge"></div>
+
+  <div class="stone-card" id="stoneCard">
+    <div class="stone-label" id="stoneLabel">今日のあなたに寄り添う石</div>
+
+    <div class="character-area">
+      <div class="character-emoji" id="charEmoji">🌸</div>
+      <div class="character-info">
+        <div class="character-name" id="charName"></div>
+        <div class="character-role" id="charRole"></div>
+        <div class="character-flower" id="charFlower"></div>
+      </div>
+    </div>
+
+    <div class="message-box">
+      <span class="message-quote">"</span>
+      <div class="message-text breathe" id="messageText"></div>
+      <div class="message-sub" id="messageSub"></div>
+    </div>
+
+    <div class="bookmark-row" id="bookmarkRow">
+      <button class="btn-bookmark" id="btnBookmark" onclick="bookmarkCurrent()">🔖 この言葉を、しおりに</button>
+    </div>
+
+    <div class="lucky-box">
+      <span class="lucky-label">✦ LUCKY</span>
+      <span class="lucky-item" id="luckyItem"></span>
+    </div>
+  </div>
+
+  <button class="btn-next" onclick="nextCharacter()">
+    ✦ 次の石からのメッセージ ✦
+  </button>
+
+  <!-- ⑥ あなたの石（最初に一度だけ・任意・とばせる） -->
+  <div class="birthday-card hidden" id="birthdayCard">
+    <div class="birthday-title">— あなたの石 —</div>
+    <div class="birthday-note">
+      よければ、お誕生日を教えてね。<br>
+      あなたにそっと寄り添う「ホームの石」が決まります。<br>
+      （この端末の中にだけ残ります。どこにも送りません。とばしてもOK）
+    </div>
+    <div class="birthday-selects">
+      <select id="bMonth"></select>
+      <select id="bDay"></select>
+    </div>
+    <div class="birthday-buttons">
+      <button class="btn-soft" onclick="setBirthday()">この日に決める</button>
+      <button class="btn-skip" onclick="skipBirthday()">今はとばす</button>
+    </div>
+  </div>
+
+  <!-- ③ 優しい記録（仮実装＝案A「灯」・Q5確定で差し替え可） -->
+  <div class="lights-card hidden" id="lightsCard">
+    <div class="lights-title">— 会えた日の灯 —</div>
+    <div class="lights-row" id="lightsRow"></div>
+    <div class="lights-note">会えた日に、灯がひとつ。消えない灯です。</div>
+  </div>
+
+  <!-- ④ 言葉のしおり -->
+  <div class="bookmarks-card hidden" id="bookmarksCard">
+    <div class="bookmarks-title">— 言葉のしおり —</div>
+    <div class="bookmarks-note">心に触れた言葉を、そっとしまっておける引き出し。</div>
+    <div id="bookmarksList"></div>
+  </div>
+
+  <!-- 簡易版だけに出る、完成版への招待 -->
+  <div class="lite-invite hidden" id="liteInvite">
+    完成版は、LINE公式の登録プレゼントでお届けします ✦
+  </div>
+
+  <div class="team-card">
+    <div class="team-title">— ekomo-mai チームより —</div>
+    <div class="team-icons">
+      <div class="team-member"><span class="team-icon">👑</span><div class="team-name">kaori</div></div>
+      <div class="team-member"><span class="team-icon">🌙</span><div class="team-name">天音</div></div>
+      <div class="team-member"><span class="team-icon">💗</span><div class="team-name">りんちゃん</div></div>
+      <div class="team-member"><span class="team-icon">🤴</span><div class="team-name">王子</div></div>
+      <div class="team-member"><span class="team-icon">🌊</span><div class="team-name">凪</div></div>
+      <div class="team-member"><span class="team-icon">💎</span><div class="team-name">ハク</div></div>
+    </div>
+    <div class="team-quote">
+      「あなたの中にも光があるよ。」<br>
+      今日も生きていることに、ありがとう。
+    </div>
+  </div>
+
+  <div class="footer">
+    ekomo-mai kaori · AI studio<br>
+    天然石の世界からあなたへ · 2026
+  </div>
+
+</div>
+
+<script src="kotodama_data.js"></script>
+<script>
+/* ============================================================
+   言霊のお守り ── アプリ本体
+   データはすべて kotodama_data.js（育つ泉）にあります。
+   このファイルは「8」を知りません（⑨ characters.length で動的）。
+   ⑩ 通知は出しません。こちらからは呼ばず、帰ってきた人を迎えるだけ。
+   ============================================================ */
+
+/* ---- モード判定（簡易版/完成版を同一ソースで出し分け） ---- */
+const params = new URLSearchParams(location.search);
+const MODE = params.get("ver") === "lite" ? "lite"
+           : params.get("ver") === "full" ? "full"
+           : APP_CONFIG.mode;
+const IS_LITE = MODE === "lite";
+
+/* 簡易版：言葉は先頭から数本だけ（データは同じ泉） */
+const stones = characters.map(c => IS_LITE
+  ? { ...c, messages: c.messages.slice(0, APP_CONFIG.liteMessageCount) }
+  : c);
+
+/* ---- localStorage（端末内で完結・外部送信なし） ---- */
+const LS_KEY = "ekomomai_kotodama";
+function loadUser() {
+  try { return JSON.parse(localStorage.getItem(LS_KEY)) || {}; }
+  catch (e) { return {}; }
+}
+function saveUser(u) { localStorage.setItem(LS_KEY, JSON.stringify(u)); }
+let user = loadUser();   // { birthday:"6-22", birthdaySkipped:true, homeStoneId, metDays:[], bookmarks:[] }
+
+/* ---- 日付まわり ---- */
+const today = new Date();
+const start = new Date(today.getFullYear(), 0, 0);
+const dayOfYear = Math.floor((today - start) / 86400000);
+const todayKey = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+
+/* ---- ⑥ 誕生日 → 星座 → ホームの石 ---- */
+function zodiacOf(month, day) {
+  for (const z of ZODIAC_RANGES) {
+    const [fm, fd] = z.from, [tm, td] = z.to;
+    if (fm <= tm) {
+      if ((month > fm || (month === fm && day >= fd)) &&
+          (month < tm || (month === tm && day <= td))) return z;
+    } else { // 年またぎ（山羊座）
+      if ((month > fm || (month === fm && day >= fd)) ||
+          (month < tm || (month === tm && day <= td))) return z;
+    }
+  }
+  return null;
+}
+function stoneById(id) { return stones.find(s => s.id === id) || null; }
+function homeStone() {
+  if (!user.homeStoneId) return null;
+  return stoneById(Array.isArray(user.homeStoneId) ? user.homeStoneId[0] : user.homeStoneId);
+}
+
+/* ---- 言葉の選び方：朝/夜で寄り添いを変える ---- */
+function pickTodayMessage(stone) {
+  const hour = today.getHours();
+  const slot = hour < 11 ? "asa" : (hour >= 17 || hour < 4) ? "yoru" : null;
+  let pool = stone.messages;
+  if (slot) {
+    const fits = pool.filter(m => m.time === slot || m.time === "itsu");
+    if (fits.length) pool = fits;
+  }
+  const idx = Math.floor(dayOfYear / stones.length) % pool.length;
+  return pool[idx];
+}
+
+/* ---- 表示 ---- */
+let currentIndex = dayOfYear % stones.length;   // 今日の石
+let currentStone = null;     // いま表示中の石（しおりはこれを見る＝表示と保存が必ず一致）
+let currentMessage = null;
+let lastShownText = "";
+
+function renderStone(stone, message, labelText) {
+  currentStone = stone;
+  currentMessage = message;
+  lastShownText = message.text;
+
+  const card = document.getElementById('stoneCard');
+  card.style.opacity = '0';
+  card.style.transform = 'translateY(10px)';
+
+  setTimeout(() => {
+    document.getElementById('stoneLabel').textContent = labelText || "今日のあなたに寄り添う石";
+    document.getElementById('charEmoji').textContent = stone.emoji;
+    document.getElementById('charName').textContent = stone.name;
+    document.getElementById('charRole').textContent = stone.role;
+    document.getElementById('charFlower').textContent = stone.flower;
+    document.getElementById('messageSub').textContent = stone.sub;
+    document.getElementById('luckyItem').textContent = stone.lucky;
+    card.style.setProperty('--card-gradient', stone.gradient);
+
+    /* ⑤ ひと呼吸 ── 言葉だけ、2秒かけて浮かび上がる */
+    const mt = document.getElementById('messageText');
+    mt.classList.remove('breathe');
+    void mt.offsetWidth;            // アニメーション再始動
+    mt.innerHTML = message.text;
+    mt.classList.add('breathe');
+
+    card.style.transition = 'all 0.4s ease';
+    card.style.opacity = '1';
+    card.style.transform = 'translateY(0)';
+  }, 200);
+}
+
+/* ② ポチッとおかわり（仕様の核・煽らない文言のまま） */
+function nextCharacter() {
+  currentIndex = (currentIndex + 1) % stones.length;
+  const stone = stones[currentIndex];
+  let pool = stone.messages.filter(m => m.text !== lastShownText);
+  if (!pool.length) pool = stone.messages;
+  const message = pool[Math.floor(Math.random() * pool.length)];
+  renderStone(stone, message);
+}
+
+/* ---- ⑥⑦⑧ 迎え方を決めて、最初の一枚を出す ---- */
+function init() {
+  const greeting = document.getElementById('greeting');
+  const home = homeStone();
+  const isBirthday = user.birthday && user.birthday === `${today.getMonth()+1}-${today.getDate()}`;
+
+  /* ⑧ おかえり判定（空いた日数は数えても、言わない） */
+  const metDays = user.metDays || [];
+  const lastMet = metDays.length ? new Date(metDays[metDays.length - 1]) : null;
+  const gapDays = lastMet ? Math.floor((today - lastMet) / 86400000) : 0;
+  const isOkaeri = lastMet && gapDays >= APP_CONFIG.okaeriGapDays;
+
+  if (isBirthday && home) {
+    /* ⑦ お誕生日 ── あなたの石が「生まれてきてくれてありがとう」 */
+    greeting.textContent = "🎂 今日は、あなたの日。";
+    renderStone(home, { time: "itsu", text: home.birthday }, "あなたの石から、お誕生日のことば");
+  } else if (isOkaeri && home) {
+    greeting.textContent = "おかえりなさい。";
+    renderStone(home, { time: "itsu", text: home.okaeri }, "あなたの石が、迎えにきたよ");
+  } else if (isOkaeri) {
+    greeting.textContent = "おかえりなさい。";
+    const stone = stones[currentIndex];
+    renderStone(stone, pickTodayMessage(stone));
+  } else {
+    greeting.textContent = "今日も、ここにいるよ。";
+    const stone = stones[currentIndex];
+    renderStone(stone, pickTodayMessage(stone));
+  }
+
+  /* ⑥ ホームの石バッジ */
+  if (home) {
+    const badge = document.getElementById('homeStoneBadge');
+    badge.innerHTML = `あなたの石：<span>${home.emoji} ${home.name}</span>`;
+    badge.classList.remove('hidden');
+  }
+
+  /* 完成版だけの機能 */
+  if (!IS_LITE) {
+    /* ⑥ 誕生日はまだ＆とばしてもいない → そっと聞く（一度だけ） */
+    if (!user.birthday && !user.birthdaySkipped) {
+      setupBirthdaySelects();
+      document.getElementById('birthdayCard').classList.remove('hidden');
+    }
+    /* ③ 会えた日を記録（連続は数えない・罰なし） */
+    if (!metDays.includes(todayKey)) {
+      metDays.push(todayKey);
+      user.metDays = metDays;
+      saveUser(user);
+    }
+    renderLights();
+    renderBookmarks();
+    document.getElementById('lightsCard').classList.remove('hidden');
+    document.getElementById('bookmarksCard').classList.remove('hidden');
+  } else {
+    /* 簡易版：記録・しおり・誕生日なし。完成版への一行だけ */
+    document.getElementById('bookmarkRow').classList.add('hidden');
+    document.getElementById('liteInvite').classList.remove('hidden');
+  }
+}
+
+/* ---- ⑥ 誕生日入力 ---- */
+function setupBirthdaySelects() {
+  const m = document.getElementById('bMonth');
+  const d = document.getElementById('bDay');
+  for (let i = 1; i <= 12; i++) m.add(new Option(`${i}月`, i));
+  for (let i = 1; i <= 31; i++) d.add(new Option(`${i}日`, i));
+}
+function setBirthday() {
+  const month = +document.getElementById('bMonth').value;
+  const day = +document.getElementById('bDay').value;
+  const z = zodiacOf(month, day);
+  if (!z) return;
+  const stoneIds = ZODIAC_TO_STONE[z.id] || [];
+  user.birthday = `${month}-${day}`;
+  user.homeStoneId = stoneIds;
+  saveUser(user);
+  document.getElementById('birthdayCard').classList.add('hidden');
+
+  const home = homeStone();
+  if (home) {
+    const badge = document.getElementById('homeStoneBadge');
+    badge.innerHTML = `あなたの石：<span>${home.emoji} ${home.name}</span>（${z.name}）`;
+    badge.classList.remove('hidden');
+    renderStone(home, { time: "itsu",
+      text: `はじめまして。${z.name}のあなたの石は、わたし。<br>これから、そっとそばにいるね。` },
+      "あなたの石が、決まりました");
+  }
+}
+function skipBirthday() {
+  user.birthdaySkipped = true;   // 共通の「今日の石」だけで成立（確定ルール通り）
+  saveUser(user);
+  document.getElementById('birthdayCard').classList.add('hidden');
+}
+
+/* ---- ③ 優しい記録：灯（仮実装＝案A。Q5確定で B石/C花 に差し替え可） ---- */
+function renderLights() {
+  const row = document.getElementById('lightsRow');
+  row.innerHTML = "";
+  const days = user.metDays || [];
+  days.forEach(() => {
+    const dot = document.createElement('div');
+    dot.className = 'light-dot';
+    row.appendChild(dot);
+  });
+}
+
+/* ---- ④ 言葉のしおり ---- */
+function bookmarkCurrent() {
+  if (!currentMessage || !currentStone) return;
+  const stone = currentStone;
+  const bookmarks = user.bookmarks || [];
+  const plain = currentMessage.text.replace(/<br\s*\/?>/g, " ");
+  if (bookmarks.some(b => b.text === plain)) return;   // 同じ言葉は二度しまわない
+  bookmarks.push({ text: plain, stone: stone.name, emoji: stone.emoji, date: todayKey });
+  user.bookmarks = bookmarks;
+  saveUser(user);
+  renderBookmarks();
+  const btn = document.getElementById('btnBookmark');
+  btn.textContent = "🔖 しおりに、しまいました";
+  setTimeout(() => { btn.textContent = "🔖 この言葉を、しおりに"; }, 2000);
+}
+function removeBookmark(i) {
+  user.bookmarks.splice(i, 1);
+  saveUser(user);
+  renderBookmarks();
+}
+function renderBookmarks() {
+  const list = document.getElementById('bookmarksList');
+  list.innerHTML = "";
+  const bookmarks = user.bookmarks || [];
+  if (!bookmarks.length) {
+    list.innerHTML = '<div class="bookmarks-empty">まだ、からっぽ。🔖を押すと、ここに言葉がたまります。</div>';
+    return;
+  }
+  bookmarks.slice().reverse().forEach((b, ri) => {
+    const i = bookmarks.length - 1 - ri;
+    const item = document.createElement('div');
+    item.className = 'bookmark-item';
+    const txt = document.createElement('div');
+    txt.className = 'bookmark-text';
+    txt.textContent = b.text;
+    const meta = document.createElement('div');
+    meta.className = 'bookmark-meta';
+    meta.textContent = `${b.emoji} ${b.stone} · ${b.date.replace(/-/g, "/")}`;
+    const rm = document.createElement('button');
+    rm.className = 'bookmark-remove';
+    rm.textContent = "✕";
+    rm.title = "手放す";
+    rm.onclick = () => removeBookmark(i);
+    item.appendChild(rm); item.appendChild(txt); item.appendChild(meta);
+    list.appendChild(item);
+  });
+}
+
+init();
+</script>
+</body>
+</html>
