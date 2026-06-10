@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>祈りの記憶 〜レムリアとムーの叡智〜 ヒーリング組曲 | ekomo-mai</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --deep: #2a2348;
+    --deep2: #3a3060;
+    --ink: #efe8f8;
+    --soft: #b8aed4;
+    --gold: #e8c987;
+    --aqua: #9fd4dc;
+    --pink: #eab8cc;
+    --card: rgba(255,255,255,0.07);
+    --line: rgba(232,201,135,0.25);
+  }
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(ellipse at 50% -10%, #4a3d78 0%, transparent 55%),
+      radial-gradient(ellipse at 10% 90%, #1d3450 0%, transparent 50%),
+      linear-gradient(170deg, #2a2348 0%, #232040 55%, #1c2a44 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+  }
+  .container { max-width: 520px; margin: 0 auto; padding: 44px 22px 70px; }
+
+  /* 星 */
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star {
+    position: absolute; width: 2px; height: 2px; border-radius: 50%;
+    background: #fff; opacity: .5; animation: twinkle 4s ease-in-out infinite;
+  }
+  @keyframes twinkle { 0%,100% { opacity: .15; } 50% { opacity: .7; } }
+  @media (prefers-reduced-motion: reduce) { .star { animation: none; } }
+
+  .content { position: relative; z-index: 1; }
+
+  header { text-align: center; margin-bottom: 12px; }
+  .logo { font-size: 10px; letter-spacing: .4em; color: var(--soft); text-transform: uppercase; margin-bottom: 14px; }
+  h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 24px; font-weight: 300; letter-spacing: .2em;
+    color: var(--gold); margin-bottom: 8px;
+  }
+  .subtitle { font-family: 'Noto Serif JP', serif; font-size: 12px; letter-spacing: .25em; color: var(--soft); }
+  .breath {
+    text-align: center; font-family: 'Noto Serif JP', serif;
+    font-size: 13px; letter-spacing: .3em; color: var(--aqua);
+    margin: 26px 0 30px; opacity: 0; animation: breatheIn 3s ease 0.5s forwards;
+  }
+  @keyframes breatheIn { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .breath { animation: none; opacity: 1; } }
+
+  /* いま流れている曲 */
+  .now-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 22px;
+    backdrop-filter: blur(8px);
+  }
+  .now-label { font-size: 9px; letter-spacing: .35em; color: var(--soft); margin-bottom: 10px; }
+  .now-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px; letter-spacing: .12em; color: var(--ink);
+    margin-bottom: 4px; min-height: 1.6em;
+  }
+  .now-sub { font-size: 11px; color: var(--soft); letter-spacing: .15em; margin-bottom: 16px; min-height: 1.4em; }
+  audio { width: 100%; height: 40px; }
+
+  /* 歌詞入り切替 */
+  .ver-row { display: flex; justify-content: center; gap: 8px; margin-top: 14px; }
+  .ver-btn {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px; letter-spacing: .15em;
+    background: none; color: var(--soft);
+    border: 1px solid rgba(184,174,212,.4);
+    border-radius: 50px; padding: 7px 18px; cursor: pointer;
+    transition: all .3s ease;
+  }
+  .ver-btn.active { color: var(--deep); background: var(--gold); border-color: var(--gold); }
+  .ver-btn:disabled { opacity: .3; cursor: default; }
+
+  /* トラックリスト */
+  .tracks { display: flex; flex-direction: column; gap: 8px; }
+  .track {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--card);
+    border: 1px solid rgba(184,174,212,.15);
+    border-radius: 14px;
+    padding: 13px 16px;
+    cursor: pointer;
+    transition: all .3s ease;
+  }
+  .track:hover { background: rgba(255,255,255,.12); }
+  .track.playing { border-color: var(--gold); background: rgba(232,201,135,.1); }
+  .track-no {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px; color: var(--soft); width: 26px; text-align: center; flex-shrink: 0;
+  }
+  .track.playing .track-no { color: var(--gold); }
+  .track-name { font-family: 'Noto Serif JP', serif; font-size: 14px; letter-spacing: .08em; flex: 1; }
+  .track-tags { display: flex; gap: 5px; }
+  .tag {
+    font-size: 9px; letter-spacing: .1em; color: var(--soft);
+    border: 1px solid rgba(184,174,212,.35); border-radius: 8px; padding: 1px 7px;
+  }
+  .track-icon { font-size: 14px; flex-shrink: 0; }
+
+  .note {
+    text-align: center; font-size: 10.5px; color: var(--soft);
+    letter-spacing: .1em; line-height: 2; margin-top: 26px; opacity: .85;
+  }
+  footer {
+    text-align: center; margin-top: 36px; padding-top: 18px;
+    border-top: 1px solid rgba(184,174,212,.2);
+    font-size: 10px; letter-spacing: .25em; color: var(--soft); opacity: .7; line-height: 2;
+  }
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="container"><div class="content">
+
+  <header>
+    <div class="logo">ekomo-mai · sound project</div>
+    <h1>祈りの記憶</h1>
+    <div class="subtitle">〜 レムリアとムーの叡智 〜 ヒーリング組曲</div>
+  </header>
+
+  <div class="breath">まず、呼吸していいよ。</div>
+
+  <div class="now-card">
+    <div class="now-label">NOW PLAYING</div>
+    <div class="now-title" id="nowTitle">曲を選んでね</div>
+    <div class="now-sub" id="nowSub">下のリストから、今日の一曲を</div>
+    <audio id="player" controls preload="none"></audio>
+    <div class="ver-row">
+      <button class="ver-btn active" id="btnInst" onclick="setVersion('inst')">インストゥルメンタル</button>
+      <button class="ver-btn" id="btnVocal" onclick="setVersion('vocal')">歌入り</button>
+    </div>
+  </div>
+
+  <div class="tracks" id="trackList"></div>
+
+  <div class="note">
+    一曲が終わると、次の曲へそっと続きます。<br>
+    ヘッドホンで聴くと、世界の奥行きが見えます🎧
+  </div>
+
+  <footer>
+    music : 王子 × kaori × suno ／ words : ekomo-mai team<br>
+    「人生の主役は、あなたです。」<br>
+    ekomo-mai kaori · AI studio · 2026
+  </footer>
+
+</div></div>
+
+<script>
+/* ---- 組曲（曲を足す時はここに追記するだけ） ---- */
+const TRACKS = [
+  { no: "01", title: "天空の祈り神殿",       sub: "天空王国 ── 旅のはじまり",     vocal: true  },
+  { no: "02", title: "天使の集う場所",       sub: "天空王国 ── 光のたまり場",     vocal: true  },
+  { no: "03", title: "虹の架かる大滝",       sub: "中央王国 ── 七色の水音",       vocal: true  },
+  { no: "04", title: "ローズクォーツの丘",   sub: "中央王国 ── 愛のほどける場所", vocal: true  },
+  { no: "05", title: "タイガーアイの聖林",   sub: "中央王国 ── 大地の鼓動",       vocal: true  },
+  { no: "06", title: "琥珀のぬくもり宿る森", sub: "中央王国 ── 記憶の番人の住処", vocal: true  },
+  { no: "07", title: "レムリアの海底神殿",   sub: "海王国 ── 沈んだ叡智",         vocal: false },
+  { no: "08", title: "ムーの大いなる叡智",   sub: "海王国 ── 太古のことば",       vocal: false },
+  { no: "09", title: "アクアマリンの凪海",   sub: "海王国 ── しずかな帰り道",     vocal: true  },
+  { no: "10", title: "クリスタル巡礼の終着地", sub: "終章 ── あなたの中の光へ",   vocal: true  },
+];
+
+let currentTrack = -1;
+let version = "inst";   // "inst" | "vocal"
+const player = document.getElementById("player");
+
+function srcOf(t) {
+  return version === "vocal" && t.vocal ? `audio/track${t.no}_vocal.mp3` : `audio/track${t.no}.mp3`;
+}
+
+function playTrack(i) {
+  currentTrack = i;
+  const t = TRACKS[i];
+  if (version === "vocal" && !t.vocal) version = "inst";   // 歌なし曲はインストへ
+  player.src = srcOf(t);
+  player.play();
+  render();
+}
+
+function setVersion(v) {
+  const t = TRACKS[currentTrack];
+  version = v;
+  if (currentTrack >= 0 && t) {
+    if (v === "vocal" && !t.vocal) { version = "inst"; render(); return; }
+    const pos = player.currentTime;
+    player.src = srcOf(t);
+    player.currentTime = pos;
+    player.play();
+  }
+  render();
+}
+
+function render() {
+  const list = document.getElementById("trackList");
+  list.innerHTML = "";
+  TRACKS.forEach((t, i) => {
+    const div = document.createElement("div");
+    div.className = "track" + (i === currentTrack ? " playing" : "");
+    div.onclick = () => playTrack(i);
+    div.innerHTML =
+      `<span class="track-no">${t.no}</span>` +
+      `<span class="track-name">${t.title}</span>` +
+      `<span class="track-tags">${t.vocal ? '<span class="tag">歌入りあり</span>' : ''}</span>` +
+      `<span class="track-icon">${i === currentTrack ? "🎵" : "▷"}</span>`;
+    list.appendChild(div);
+  });
+  if (currentTrack >= 0) {
+    const t = TRACKS[currentTrack];
+    document.getElementById("nowTitle").textContent = `第${t.no}曲　${t.title}`;
+    document.getElementById("nowSub").textContent = t.sub;
+  }
+  document.getElementById("btnInst").classList.toggle("active", version === "inst");
+  document.getElementById("btnVocal").classList.toggle("active", version === "vocal");
+  document.getElementById("btnVocal").disabled = currentTrack >= 0 && !TRACKS[currentTrack].vocal;
+}
+
+/* 一曲終わったら、次の曲へそっと */
+player.addEventListener("ended", () => {
+  if (currentTrack < TRACKS.length - 1) playTrack(currentTrack + 1);
+});
+
+/* 星空 */
+const stars = document.getElementById("stars");
+for (let i = 0; i < 60; i++) {
+  const s = document.createElement("div");
+  s.className = "star";
+  s.style.left = Math.random() * 100 + "vw";
+  s.style.top = Math.random() * 100 + "vh";
+  s.style.animationDelay = Math.random() * 4 + "s";
+  stars.appendChild(s);
+}
+
+render();
+</script>
+</body>
+</html>

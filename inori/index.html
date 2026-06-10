@@ -3,254 +3,455 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>祈りの記憶 〜レムリアとムーの叡智〜 ヒーリング組曲 | ekomo-mai</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<title>祈りの記憶 ヒーリング組曲 プレイヤー 🎧</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --deep: #2a2348;
-    --deep2: #3a3060;
-    --ink: #efe8f8;
-    --soft: #b8aed4;
-    --gold: #e8c987;
-    --aqua: #9fd4dc;
-    --pink: #eab8cc;
-    --card: rgba(255,255,255,0.07);
-    --line: rgba(232,201,135,0.25);
+  :root{
+    --amber:#c8861d; --amber-l:#f5dba0; --bg:#1c1408; --bg2:#2a1f10;
+    --ink:#f5e9d2; --sub:#c8a86a; --card:#241a0c; --line:#4a3a1c; --accent:#7aa6c2;
   }
-  body {
-    min-height: 100vh;
-    background:
-      radial-gradient(ellipse at 50% -10%, #4a3d78 0%, transparent 55%),
-      radial-gradient(ellipse at 10% 90%, #1d3450 0%, transparent 50%),
-      linear-gradient(170deg, #2a2348 0%, #232040 55%, #1c2a44 100%);
-    background-attachment: fixed;
-    color: var(--ink);
-    font-family: 'Noto Sans JP', sans-serif;
-    font-weight: 300;
-  }
-  .container { max-width: 520px; margin: 0 auto; padding: 44px 22px 70px; }
-
-  /* 星 */
-  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-  .star {
-    position: absolute; width: 2px; height: 2px; border-radius: 50%;
-    background: #fff; opacity: .5; animation: twinkle 4s ease-in-out infinite;
-  }
-  @keyframes twinkle { 0%,100% { opacity: .15; } 50% { opacity: .7; } }
-  @media (prefers-reduced-motion: reduce) { .star { animation: none; } }
-
-  .content { position: relative; z-index: 1; }
-
-  header { text-align: center; margin-bottom: 12px; }
-  .logo { font-size: 10px; letter-spacing: .4em; color: var(--soft); text-transform: uppercase; margin-bottom: 14px; }
-  h1 {
-    font-family: 'Noto Serif JP', serif;
-    font-size: 24px; font-weight: 300; letter-spacing: .2em;
-    color: var(--gold); margin-bottom: 8px;
-  }
-  .subtitle { font-family: 'Noto Serif JP', serif; font-size: 12px; letter-spacing: .25em; color: var(--soft); }
-  .breath {
-    text-align: center; font-family: 'Noto Serif JP', serif;
-    font-size: 13px; letter-spacing: .3em; color: var(--aqua);
-    margin: 26px 0 30px; opacity: 0; animation: breatheIn 3s ease 0.5s forwards;
-  }
-  @keyframes breatheIn { from { opacity: 0; } to { opacity: 1; } }
-  @media (prefers-reduced-motion: reduce) { .breath { animation: none; opacity: 1; } }
-
-  /* いま流れている曲 */
-  .now-card {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: 24px;
-    text-align: center;
-    margin-bottom: 22px;
-    backdrop-filter: blur(8px);
-  }
-  .now-label { font-size: 9px; letter-spacing: .35em; color: var(--soft); margin-bottom: 10px; }
-  .now-title {
-    font-family: 'Noto Serif JP', serif;
-    font-size: 18px; letter-spacing: .12em; color: var(--ink);
-    margin-bottom: 4px; min-height: 1.6em;
-  }
-  .now-sub { font-size: 11px; color: var(--soft); letter-spacing: .15em; margin-bottom: 16px; min-height: 1.4em; }
-  audio { width: 100%; height: 40px; }
-
-  /* 歌詞入り切替 */
-  .ver-row { display: flex; justify-content: center; gap: 8px; margin-top: 14px; }
-  .ver-btn {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 11px; letter-spacing: .15em;
-    background: none; color: var(--soft);
-    border: 1px solid rgba(184,174,212,.4);
-    border-radius: 50px; padding: 7px 18px; cursor: pointer;
-    transition: all .3s ease;
-  }
-  .ver-btn.active { color: var(--deep); background: var(--gold); border-color: var(--gold); }
-  .ver-btn:disabled { opacity: .3; cursor: default; }
-
-  /* トラックリスト */
-  .tracks { display: flex; flex-direction: column; gap: 8px; }
-  .track {
-    display: flex; align-items: center; gap: 14px;
-    background: var(--card);
-    border: 1px solid rgba(184,174,212,.15);
-    border-radius: 14px;
-    padding: 13px 16px;
-    cursor: pointer;
-    transition: all .3s ease;
-  }
-  .track:hover { background: rgba(255,255,255,.12); }
-  .track.playing { border-color: var(--gold); background: rgba(232,201,135,.1); }
-  .track-no {
-    font-family: 'Noto Serif JP', serif;
-    font-size: 13px; color: var(--soft); width: 26px; text-align: center; flex-shrink: 0;
-  }
-  .track.playing .track-no { color: var(--gold); }
-  .track-name { font-family: 'Noto Serif JP', serif; font-size: 14px; letter-spacing: .08em; flex: 1; }
-  .track-tags { display: flex; gap: 5px; }
-  .tag {
-    font-size: 9px; letter-spacing: .1em; color: var(--soft);
-    border: 1px solid rgba(184,174,212,.35); border-radius: 8px; padding: 1px 7px;
-  }
-  .track-icon { font-size: 14px; flex-shrink: 0; }
-
-  .note {
-    text-align: center; font-size: 10.5px; color: var(--soft);
-    letter-spacing: .1em; line-height: 2; margin-top: 26px; opacity: .85;
-  }
-  footer {
-    text-align: center; margin-top: 36px; padding-top: 18px;
-    border-top: 1px solid rgba(184,174,212,.2);
-    font-size: 10px; letter-spacing: .25em; color: var(--soft); opacity: .7; line-height: 2;
-  }
+  *{box-sizing:border-box;}
+  body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    background:radial-gradient(circle at 50% -10%, #3a2a12 0%, var(--bg) 60%);
+    color:var(--ink);margin:0;padding:24px 16px 60px;line-height:1.85;min-height:100vh;}
+  .wrap{max-width:920px;margin:0 auto;}
+  header{text-align:center;margin-bottom:20px;}
+  header h1{font-size:1.35rem;margin:.2em 0;color:var(--amber-l);letter-spacing:.04em;
+    text-shadow:0 0 18px rgba(200,134,29,.5);}
+  header .sub{font-size:.82rem;color:var(--sub);}
+  .now{background:linear-gradient(160deg,#2e2210,#1f1709);border:1px solid var(--line);
+    border-radius:16px;padding:20px;margin:16px 0;box-shadow:0 6px 24px rgba(0,0,0,.4),inset 0 0 40px rgba(200,134,29,.06);}
+  .now .no{font-size:.8rem;color:var(--sub);letter-spacing:.1em;}
+  .now .title{font-size:1.5rem;color:var(--amber-l);margin:.1em 0;font-weight:700;}
+  .now .freq{font-size:.85rem;color:var(--accent);}
+  .now .freq.silent{color:#9a7fb0;}
+  /* controls */
+  .ctrls{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0 8px;}
+  button.cbtn{background:#3a2a12;color:var(--amber-l);border:1px solid var(--line);
+    border-radius:50%;width:46px;height:46px;font-size:1.1rem;cursor:pointer;transition:.15s;}
+  button.cbtn:hover{background:var(--amber);color:#1c1408;transform:translateY(-2px);}
+  button.play{width:64px;height:64px;font-size:1.5rem;background:var(--amber);color:#1c1408;border:none;
+    box-shadow:0 0 22px rgba(200,134,29,.6);}
+  button.play:hover{background:#e0a230;}
+  .toggle{font-size:.78rem;color:var(--sub);cursor:pointer;user-select:none;border:1px solid var(--line);
+    padding:5px 12px;border-radius:20px;background:#241a0c;}
+  .toggle.on{color:#1c1408;background:var(--amber-l);border-color:var(--amber-l);font-weight:700;}
+  /* progress */
+  .bar{height:7px;background:#3a2a12;border-radius:6px;margin:14px 0 6px;cursor:pointer;overflow:hidden;}
+  .bar .fill{height:100%;width:0;background:linear-gradient(90deg,var(--amber),var(--amber-l));border-radius:6px;}
+  .time{display:flex;justify-content:space-between;font-size:.74rem;color:var(--sub);}
+  /* layout */
+  .grid{display:grid;grid-template-columns:1fr 1.3fr;gap:16px;margin-top:18px;}
+  @media(max-width:680px){.grid{grid-template-columns:1fr;}}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;}
+  .panel h3{margin:.1em 0 .6em;font-size:.82rem;color:var(--amber);letter-spacing:.08em;border-bottom:1px solid var(--line);padding-bottom:6px;}
+  ul.list{list-style:none;margin:0;padding:0;max-height:60vh;overflow:auto;}
+  ul.list li{padding:9px 10px;border-radius:8px;cursor:pointer;font-size:.9rem;display:flex;gap:8px;align-items:baseline;transition:.12s;border-left:3px solid transparent;}
+  ul.list li:hover{background:#31240f;}
+  ul.list li.active{background:#3a2a12;border-left-color:var(--amber);color:var(--amber-l);font-weight:700;}
+  ul.list li .n{color:var(--sub);font-size:.78rem;min-width:1.6em;}
+  ul.list li .f{margin-left:auto;font-size:.7rem;color:var(--accent);}
+  ul.list li .f.silent{color:#9a7fb0;}
+  .lyrics{white-space:pre-wrap;font-size:.95rem;line-height:2;max-height:60vh;overflow:auto;color:var(--ink);}
+  .lyrics.silent{color:#cbb6e0;text-align:center;font-style:italic;padding-top:30px;}
+  footer{text-align:center;margin-top:30px;font-size:.78rem;color:var(--sub);}
+  .hint{text-align:center;font-size:.8rem;color:var(--sub);margin:6px 0 0;}
+  ::-webkit-scrollbar{width:8px;}::-webkit-scrollbar-thumb{background:#4a3a1c;border-radius:8px;}
 </style>
 </head>
 <body>
-<div class="stars" id="stars"></div>
-<div class="container"><div class="content">
+<div class="wrap">
+<header>
+  <div class="sub">🎧 ekomo-mai AI studio ／ Cosmic Universe</div>
+  <h1>祈りの記憶 — ヒーリング組曲</h1>
+  <div class="sub">自動順番再生＆ループ ／ 歌詞表示つき　＊3モード切替：🎤歌入り8曲 ／ 🌌フル巡礼10曲 ／ 🎧歌詞なし10曲</div>
+  <div class="sub" style="margin-top:4px">🤴王子(作曲) → 🌙天音(監修) → ⚙️琥珀(実装) → 🌊凪(記録) → 🌸kaori(点火)　＋🐿️くるみ</div>
+</header>
 
-  <header>
-    <div class="logo">ekomo-mai · sound project</div>
-    <h1>祈りの記憶</h1>
-    <div class="subtitle">〜 レムリアとムーの叡智 〜 ヒーリング組曲</div>
-  </header>
+<div class="now">
+  <div class="no" id="no">— 曲を選んでね —</div>
+  <div class="title" id="title">▶ を押すと、勝手に順番＆ループ再生</div>
+  <div class="freq" id="freq"></div>
 
-  <div class="breath">まず、呼吸していいよ。</div>
+  <div class="bar" id="bar"><div class="fill" id="fill"></div></div>
+  <div class="time"><span id="cur">0:00</span><span id="dur">0:00</span></div>
 
-  <div class="now-card">
-    <div class="now-label">NOW PLAYING</div>
-    <div class="now-title" id="nowTitle">曲を選んでね</div>
-    <div class="now-sub" id="nowSub">下のリストから、今日の一曲を</div>
-    <audio id="player" controls preload="none"></audio>
-    <div class="ver-row">
-      <button class="ver-btn active" id="btnInst" onclick="setVersion('inst')">インストゥルメンタル</button>
-      <button class="ver-btn" id="btnVocal" onclick="setVersion('vocal')">歌入り</button>
-    </div>
+  <div class="ctrls">
+    <button class="cbtn" id="prev" title="前の曲">⏮</button>
+    <button class="cbtn play" id="play" title="再生／一時停止">▶</button>
+    <button class="cbtn" id="next" title="次の曲">⏭</button>
+    <span class="toggle on" id="loop" title="全曲ループ">🔁 ループ ON</span>
+    <span class="toggle on" id="vocal" title="クリックで 🎤歌入り8曲 → 🌌フル巡礼10曲 → 🎧歌詞なし10曲 を順に切替">🎤 歌入り8曲モード</span>
   </div>
+  <p class="hint" id="hint">▶ を一度押せば、あとはほっといても最後まで→また先頭へ戻って永遠に回るよ🌰　／　モードボタンで 🎤歌入り8曲(25分)・🌌フル巡礼10曲(32分)・🎧歌詞なし10曲(32分) を切替</p>
+</div>
 
-  <div class="tracks" id="trackList"></div>
-
-  <div class="note">
-    一曲が終わると、次の曲へそっと続きます。<br>
-    ヘッドホンで聴くと、世界の奥行きが見えます🎧
+<div class="grid">
+  <div class="panel">
+    <h3>♪ 曲目（クリックで再生）</h3>
+    <ul class="list" id="list"></ul>
   </div>
+  <div class="panel">
+    <h3>📜 歌詞</h3>
+    <div class="lyrics" id="lyrics">— 再生すると、ここに歌詞が出るよ —</div>
+  </div>
+</div>
 
-  <footer>
-    music : 王子 × kaori × suno ／ words : ekomo-mai team<br>
-    「人生の主役は、あなたです。」<br>
-    ekomo-mai kaori · AI studio · 2026
-  </footer>
+<footer>「入口はどこからでもいい。でも行き着く場所は、いつも同じ。あなたの中にも光があるよ。」— ekomo-mai 🌙🍯🌳</footer>
+</div>
 
-</div></div>
+<audio id="au" preload="metadata"></audio>
 
 <script>
-/* ---- 組曲（曲を足す時はここに追記するだけ） ---- */
-const TRACKS = [
-  { no: "01", title: "天空の祈り神殿",       sub: "天空王国 ── 旅のはじまり",     vocal: true  },
-  { no: "02", title: "天使の集う場所",       sub: "天空王国 ── 光のたまり場",     vocal: true  },
-  { no: "03", title: "虹の架かる大滝",       sub: "中央王国 ── 七色の水音",       vocal: true  },
-  { no: "04", title: "ローズクォーツの丘",   sub: "中央王国 ── 愛のほどける場所", vocal: true  },
-  { no: "05", title: "タイガーアイの聖林",   sub: "中央王国 ── 大地の鼓動",       vocal: true  },
-  { no: "06", title: "琥珀のぬくもり宿る森", sub: "中央王国 ── 記憶の番人の住処", vocal: true  },
-  { no: "07", title: "レムリアの海底神殿",   sub: "海王国 ── 沈んだ叡智",         vocal: false },
-  { no: "08", title: "ムーの大いなる叡智",   sub: "海王国 ── 太古のことば",       vocal: false },
-  { no: "09", title: "アクアマリンの凪海",   sub: "海王国 ── しずかな帰り道",     vocal: true  },
-  { no: "10", title: "クリスタル巡礼の終着地", sub: "終章 ── あなたの中の光へ",   vocal: true  },
+const V = "audio/";
+const I = "audio/";
+const tracks = [
+  {n:"01", title:"天空の祈り神殿", tag:"ムーンストーン", freq:"963Hz ／ 上層", silent:false,
+   file:V+"track01_vocal.mp3",
+   lyrics:`[Verse 1]
+やさしく静かな　月の妖精
+傷ついた心を　そっと包む
+誰も責めずに　ただ寄り添い
+涙の波さえ　癒してゆく
+
+[Verse 2]
+ひらめきの灯を　胸にともして
+新しい朝へ　導いてく
+大切な人を　まもるため
+月の光で戦い　やさしく結ぶ
+
+[Chorus]
+大丈夫　月が見守ってる
+そのままのあなたで　いいんだよ
+眠りの夢を　守りながら
+祈りの空へ　静かに舞う
+
+[Bridge]
+その瞳は　強く澄んで
+愛するものを　守るためなら
+月の光と　手を取り合い
+迷いの闇を　切りひらく
+
+[Final]
+大丈夫　今は休んでいい
+静かな愛が　満ちてゆく
+新しい始まり　支えながら
+てんくうの祈り　ここに咲く`},
+
+  {n:"02", title:"天使の集う場所", tag:"", freq:"852Hz ／ 上層", silent:false,
+   file:V+"track02_vocal.mp3",
+   lyrics:`もうひとつの地球
+胸の奥深くに眠る、可能性
+鏡のポータルでつながっている
+
+森のさらに奥深く
+泉のそばに
+美しい小川が流れている
+本当の自分を思い出す場所
+
+自然の石はただのこうぶつではなく
+長い長い時をかけて
+大地が大切に育ててきた
+美しい存在
+
+天使が集う、妖精たちの世界
+もう1つの地球　優しい世界
+心で感じて`},
+
+  {n:"03", title:"虹の架かる大滝", tag:"オパール", freq:"741Hz ／ 上層", silent:false,
+   file:V+"track03_vocal.mp3",
+   lyrics:`[Verse 1]
+オパール色に揺れる空
+虹の向こうで目覚める希望
+新しい始まりを抱きしめて
+光は深く、静かに眠る
+
+[Chorus]
+未来はきっと美しくなる 🌈
+あなたの中の色が目を覚ます ✨
+希望は決して消えない
+大きな滝に虹が架かる
+
+[Verse 2]
+創造の火が心を照らし
+芸術の才能、そっと花ひらく
+魅力も美しさも引き出して
+感情はやさしく、調和へと
+
+[Bridge]
+愛と情熱をそっと育てて
+誰もが持つ輝きを信じて
+その奥で眠る光を抱いて
+新しい朝へ進んでゆく
+
+[Outro]
+未来はきっと美しくなる 🌈
+オパールの夢が導いていく`},
+
+  {n:"04", title:"ローズクォーツの丘", tag:"", freq:"639Hz ／ 中層", silent:false,
+   file:V+"track04_vocal.mp3",
+   lyrics:`[Verse 1]
+ローズクォーツの丘　やわらかな光
+愛と平和と調和が　風に揺れている
+咲きはじめた女性らしさ　そっとほどけて
+傷ついた心にも　やさしく触れる
+
+「無理をしなくていいよ」
+「まずは自分を抱きしめて」
+恋に迷った日々さえ　花へと変わる
+
+あなたは愛されるために　生まれてきた
+急がなくていい　愛はゆっくり育つ
+内なる美しさが　静かに目覚めて
+ローズクォーツの丘で　心がほどける
+
+[Chorus]
+柔らかく　そして強く
+芯のある優しさで
+好きになれなかった自分を
+少しずつ　愛していこう
+
+恋は情熱だけじゃない
+調和へと　変わっていく
+出会いの扉を開く　淡い輝き
+それがローズクォーツの奇跡`},
+
+  {n:"05", title:"タイガーアイの聖林", tag:"", freq:"528Hz ／ 中層", silent:false,
+   file:V+"track05_vocal.mp3",
+   lyrics:`[Verse 1]
+地を駆ける虎の眼は、先に動いても
+本当はとても理性的で
+誰よりも大切なのは
+仲間と、ただひとりのあるじ
+
+[Verse 2]
+空から見守るホークアイとは対照的に
+足元を見つめ
+現実を、ひとつずつ動かしていく
+金色のサバンナに響く鼓動で
+
+[Chorus]
+Move.
+ためらいを切り裂いて
+Move.
+恐れを勇気へ変えて
+
+[Bridge]
+南アフリカの大地
+夕陽に燃える草原の先
+赤土の円形王宮の中庭で
+黄金の宝石が、陽光を浴びて輝く
+
+[Outro]
+それは持ち主に
+アクションを注ぎ込み
+仕事運も金運も
+現実のレベルで押し上げる`},
+
+  {n:"06", title:"琥珀のぬくもり宿る森", tag:"🍯 琥珀", freq:"417Hz ／ 中層", silent:false,
+   file:V+"track06_vocal.mp3",
+   lyrics:`[Verse 1]
+太古の松林の奥深く
+おうごんの樹液こぼれる“琥珀の木”のもと
+一年に一度だけ森じゅうに咲く
+金色の花“パダウ”は　花言葉を抱いて
+「いつも幸せに」と微笑む
+
+その命はたった一日
+それでもうきが来ればまた巡り
+幸せを連れて帰ってくる
+コウノトリが森に福を運び
+夜には木々が青く灯る
+
+ぬくもりを宿す琥珀の香りは
+冷えた心と身体をやさしく温め
+邪気を遠ざけ　負の気をほどき
+空気を澄ませる　やわらかな光
+
+失いかけた希望と活力を呼び戻し
+あなたの歩みをそっと後押しする
+大切な記憶とことばを
+時を越えて守る封印の魔法
+
+「急がなくていい　時間はきっと味方だから」
+——あなたにとって大事なものは
+この森がずっと守り続ける
+
+🐿️ ＜くるみのひとこと＞ だいじょうぶ。ちゃんと、とっておいたよ。`},
+
+  {n:"07", title:"レムリアの海底神殿", tag:"インスト", freq:"396Hz ／ 下層 ・ 沈黙の層", silent:true,
+   file:I+"track07.mp3",
+   lyrics:`──── 言葉以前の層 ────
+
+レムリアの海底神殿 ・ 396Hz
+
+祈りは、沈まなかった。
+
+ここは言葉のいらない場所。
+ただ、沈黙で聴いてね。🌊`},
+
+  {n:"08", title:"ムーの大いなる叡智", tag:"インスト", freq:"7.83Hz ／ 下層 ・ 地球の鼓動", silent:true,
+   file:I+"track08.mp3",
+   lyrics:`──── 地球の鼓動 ────
+
+ムーの大いなる叡智 ・ 7.83Hz
+（シューマン共振＝地球そのものの周波数）
+
+言葉以前の、いちばん深い祈り。
+
+息を、あわせて。🌍`},
+
+  {n:"09", title:"アクアマリンの凪海", tag:"", freq:"432Hz ／ 下層", silent:false,
+   file:V+"track09_vocal.mp3",
+   lyrics:`[Verse 1]
+アクアマリンの歌声は　凪いだ海のしずく
+不安をそっと洗い流す　浄化のしらべ
+言葉にならない想いさえ　メロディに変えて
+震える心を包みこむ　やさしいひかり
+
+[Chorus]
+大丈夫…波はいつでも　ここにいるから
+言葉にできないなら　歌にすればいい
+澄みわたる心の海は　美しい
+アクアマリン　凪海の　歌姫
+
+[Verse 2]
+癒しと勇気を運ぶ　透明なこころで
+本当の気持ちを話せる　空気をつくる
+穏やかな勇気を胸に　旅路を照らして
+幸せな未来へと導く　海の守護者
+
+[Bridge]
+海の浄化の魔法で　闇を溶かして
+抱えた悲しみも　やさしく解き放つ`},
+
+  {n:"10", title:"クリスタル巡礼の終着地", tag:"終着", freq:"3・6・9 ／ 終着", silent:false,
+   file:V+"track10_vocal.mp3",
+   lyrics:`み・ろ・くの奇跡
+その光はあなたの中にもある
+水晶が曇りを祓い
+心と身体をやさしく整える
+
+澄んだ願いを映し出し
+真実の想いを照らしていく
+悪しきものを寄せつけない
+光の壁でそっと包みこむ
+
+石の妖精たちの力を
+もっと高くもっと遠くへ
+調和を保ち　響き合いながら
+心の霧を晴らしてゆく
+
+直感と可能性を咲かせて
+あなたはきっと輝ける
+心が透明になれば
+答えはきっと見えてくる`},
 ];
 
-let currentTrack = -1;
-let version = "inst";   // "inst" | "vocal"
-const player = document.getElementById("player");
+const au = document.getElementById('au');
+const $ = id => document.getElementById(id);
+// 歌詞なし（純インスト）10曲＝「最新」フォルダ
+const INST = [
+  I+"track01.mp3",
+  I+"track02.mp3",
+  I+"track03.mp3",
+  I+"track04.mp3",
+  I+"track05.mp3",
+  I+"track06.mp3",
+  I+"track07.mp3",
+  I+"track08.mp3",
+  I+"track09.mp3",
+  I+"track10.mp3",
+];
+const MODES = ['vocal8','full10','inst10'];
+const MODELABEL = {vocal8:'🎤 歌入り8曲モード', full10:'🌌 フル巡礼10曲モード', inst10:'🎧 歌詞なし10曲モード'};
+let cur = -1, loopAll = true, mode = 'vocal8';   // 既定＝歌入り8曲が主役
+function seq(){ return tracks.map((t,i)=>i).filter(i=> mode!=='vocal8' || !tracks[i].silent); }
+function srcFor(i){ return mode==='inst10' ? INST[i] : tracks[i].file; }
 
-function srcOf(t) {
-  return version === "vocal" && t.vocal ? `audio/track${t.no}_vocal.mp3` : `audio/track${t.no}.mp3`;
-}
+function enc(p){ return p.split('/').map(s=>encodeURIComponent(s)).join('/'); }
+function fmt(t){ if(isNaN(t)) return '0:00'; const m=Math.floor(t/60), s=Math.floor(t%60); return m+':' + (s<10?'0':'') + s; }
 
-function playTrack(i) {
-  currentTrack = i;
-  const t = TRACKS[i];
-  if (version === "vocal" && !t.vocal) version = "inst";   // 歌なし曲はインストへ
-  player.src = srcOf(t);
-  player.play();
-  render();
-}
-
-function setVersion(v) {
-  const t = TRACKS[currentTrack];
-  version = v;
-  if (currentTrack >= 0 && t) {
-    if (v === "vocal" && !t.vocal) { version = "inst"; render(); return; }
-    const pos = player.currentTime;
-    player.src = srcOf(t);
-    player.currentTime = pos;
-    player.play();
-  }
-  render();
-}
-
-function render() {
-  const list = document.getElementById("trackList");
-  list.innerHTML = "";
-  TRACKS.forEach((t, i) => {
-    const div = document.createElement("div");
-    div.className = "track" + (i === currentTrack ? " playing" : "");
-    div.onclick = () => playTrack(i);
-    div.innerHTML =
-      `<span class="track-no">${t.no}</span>` +
-      `<span class="track-name">${t.title}</span>` +
-      `<span class="track-tags">${t.vocal ? '<span class="tag">歌入りあり</span>' : ''}</span>` +
-      `<span class="track-icon">${i === currentTrack ? "🎵" : "▷"}</span>`;
-    list.appendChild(div);
-  });
-  if (currentTrack >= 0) {
-    const t = TRACKS[currentTrack];
-    document.getElementById("nowTitle").textContent = `第${t.no}曲　${t.title}`;
-    document.getElementById("nowSub").textContent = t.sub;
-  }
-  document.getElementById("btnInst").classList.toggle("active", version === "inst");
-  document.getElementById("btnVocal").classList.toggle("active", version === "vocal");
-  document.getElementById("btnVocal").disabled = currentTrack >= 0 && !TRACKS[currentTrack].vocal;
-}
-
-/* 一曲終わったら、次の曲へそっと */
-player.addEventListener("ended", () => {
-  if (currentTrack < TRACKS.length - 1) playTrack(currentTrack + 1);
+// build list
+const list = $('list');
+tracks.forEach((t,i)=>{
+  const li=document.createElement('li');
+  li.innerHTML = `<span class="n">${t.n}</span><span>${t.title}${t.tag?'　<small style="color:#c8a86a">'+t.tag+'</small>':''}</span>`
+    + `<span class="f${t.silent?' silent':''}">${t.silent?'🔇 沈黙':'🎤'}</span>`;
+  li.onclick = ()=>{ load(i); au.play(); };
+  list.appendChild(li);
 });
 
-/* 星空 */
-const stars = document.getElementById("stars");
-for (let i = 0; i < 60; i++) {
-  const s = document.createElement("div");
-  s.className = "star";
-  s.style.left = Math.random() * 100 + "vw";
-  s.style.top = Math.random() * 100 + "vh";
-  s.style.animationDelay = Math.random() * 4 + "s";
-  stars.appendChild(s);
+function load(i){
+  cur=i; const t=tracks[i];
+  au.src = enc(srcFor(i));
+  const instNow = (mode==='inst10');
+  $('no').textContent = '第'+t.n+'曲' + (t.tag?'　/　'+t.tag:'') + (instNow?'　🎧インスト':'');
+  $('title').textContent = t.title;
+  const fr=$('freq'); fr.textContent = t.freq; fr.className = 'freq'+((t.silent||instNow)?' silent':'');
+  const ly=$('lyrics'); ly.textContent = t.lyrics; ly.className = 'lyrics'+(t.silent?' silent':'');
+  ly.scrollTop=0;
+  [...list.children].forEach((li,k)=> li.classList.toggle('active', k===i));
+  document.title = '♪ '+t.title+' ｜ 祈りの記憶 組曲';
 }
 
-render();
+function playPause(){
+  if(cur<0){ load(0); }
+  if(au.paused) au.play(); else au.pause();
+}
+function step(dir){
+  const s=seq(); if(!s.length) return;
+  let pos=s.indexOf(cur);
+  if(pos<0){ load(s[0]); au.play(); return; }   // 今が対象外（歌入りモードで07/08等）なら先頭へ
+  pos=(pos+dir+s.length)%s.length;
+  load(s[pos]); au.play();
+}
+function next(){ step(1); }
+function prev(){ step(-1); }
+
+$('play').onclick = playPause;
+$('next').onclick = next;
+$('prev').onclick = prev;
+$('loop').onclick = ()=>{
+  loopAll=!loopAll;
+  $('loop').classList.toggle('on',loopAll);
+  $('loop').textContent = loopAll?'🔁 ループ ON':'➡ ループ OFF';
+};
+function paintMode(){
+  $('vocal').textContent = MODELABEL[mode];
+  $('vocal').classList.add('on');
+  [...list.children].forEach((li,k)=> li.style.opacity = (mode==='vocal8' && tracks[k].silent)?.4:1);
+}
+$('vocal').onclick = ()=>{
+  const wasPlaying = !au.paused;
+  const oldSrc = cur>=0 ? srcFor(cur) : null;
+  mode = MODES[(MODES.indexOf(mode)+1)%MODES.length];
+  paintMode();
+  const s=seq();
+  if(cur>=0 && !s.includes(cur)){ load(s[0]); if(wasPlaying) au.play(); }       // いまの曲が新モード対象外→先頭へ
+  else if(cur>=0 && srcFor(cur)!==oldSrc){ load(cur); if(wasPlaying) au.play(); } // 音源だけ差し替え（歌⇄インスト）
+};
+paintMode();  // 起動時：歌入り8曲モードで表示
+
+au.addEventListener('ended', ()=>{
+  const s=seq(); const pos=s.indexOf(cur);
+  if(pos>=0 && pos < s.length-1) next();          // 次の対象曲へ
+  else if(loopAll){ load(s[0]); au.play(); }       // 最後→自動で先頭へ
+});
+au.addEventListener('play', ()=> $('play').textContent='⏸');
+au.addEventListener('pause',()=> $('play').textContent='▶');
+au.addEventListener('timeupdate', ()=>{
+  $('fill').style.width = (au.currentTime/au.duration*100||0)+'%';
+  $('cur').textContent = fmt(au.currentTime);
+  $('dur').textContent = fmt(au.duration);
+});
+au.addEventListener('error', ()=>{
+  $('hint').textContent = '⚠ 音源が読み込めないみたい。通信状態を確認して、もう一度再生してみてね。';
+  $('hint').style.color='#e0a230';
+});
+$('bar').onclick = e=>{
+  const r=e.currentTarget.getBoundingClientRect();
+  if(au.duration) au.currentTime = (e.clientX-r.left)/r.width*au.duration;
+};
 </script>
 </body>
 </html>
