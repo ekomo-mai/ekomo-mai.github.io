@@ -3,69 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>祈りの記憶 ヒーリング組曲 プレイヤー 🎧</title>
+<title>祈りの記憶 ヒーリング組曲 プレイヤー 🌸</title>
 <style>
   :root{
-    --amber:#c8861d; --amber-l:#f5dba0; --bg:#1c1408; --bg2:#2a1f10;
-    --ink:#f5e9d2; --sub:#c8a86a; --card:#241a0c; --line:#4a3a1c; --accent:#7aa6c2;
+    --pink:#e8a0c0; --purple:#b8a0d8; --gold:#d4a840; --gold-l:#f5dba0;
+    --ink:#4a3858; --deep:#3a2848; --sub:#8a7898; --card:rgba(255,255,255,0.75);
+    --line:rgba(184,160,216,0.35); --accent:#7aa6c2;
   }
   *{box-sizing:border-box;}
-  body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
-    background:radial-gradient(circle at 50% -10%, #3a2a12 0%, var(--bg) 60%);
+  body{font-family:"Hiragino Maru Gothic ProN","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    background:linear-gradient(135deg,#f9e8f0 0%,#ede8f9 50%,#fdf7e8 100%);
+    background-attachment:fixed;
     color:var(--ink);margin:0;padding:24px 16px 60px;line-height:1.85;min-height:100vh;}
   .wrap{max-width:920px;margin:0 auto;}
   header{text-align:center;margin-bottom:20px;}
-  header h1{font-size:1.35rem;margin:.2em 0;color:var(--amber-l);letter-spacing:.04em;
-    text-shadow:0 0 18px rgba(200,134,29,.5);}
+  header h1{font-size:1.35rem;margin:.2em 0;color:#7a5c84;letter-spacing:.06em;}
   header .sub{font-size:.82rem;color:var(--sub);}
-  .now{background:linear-gradient(160deg,#2e2210,#1f1709);border:1px solid var(--line);
-    border-radius:16px;padding:20px;margin:16px 0;box-shadow:0 6px 24px rgba(0,0,0,.4),inset 0 0 40px rgba(200,134,29,.06);}
+  header .sub a{color:#b08bc4;text-decoration:none;}
+  .now{background:var(--card);border:1px solid var(--line);
+    border-radius:20px;padding:20px;margin:16px 0;box-shadow:0 8px 28px rgba(184,160,216,.18);backdrop-filter:blur(8px);}
   .now .no{font-size:.8rem;color:var(--sub);letter-spacing:.1em;}
-  .now .title{font-size:1.5rem;color:var(--amber-l);margin:.1em 0;font-weight:700;}
+  .now .title{font-size:1.5rem;color:#7a5c84;margin:.1em 0;font-weight:700;}
   .now .freq{font-size:.85rem;color:var(--accent);}
-  .now .freq.silent{color:#9a7fb0;}
+  .now .freq.silent{color:#a08bc8;}
   /* controls */
-  .ctrls{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0 8px;}
-  button.cbtn{background:#3a2a12;color:var(--amber-l);border:1px solid var(--line);
+  .ctrls{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0 8px;flex-wrap:wrap;}
+  button.cbtn{background:#fff;color:#9b7bb0;border:1.5px solid var(--line);
     border-radius:50%;width:46px;height:46px;font-size:1.1rem;cursor:pointer;transition:.15s;}
-  button.cbtn:hover{background:var(--amber);color:#1c1408;transform:translateY(-2px);}
-  button.play{width:64px;height:64px;font-size:1.5rem;background:var(--amber);color:#1c1408;border:none;
-    box-shadow:0 0 22px rgba(200,134,29,.6);}
-  button.play:hover{background:#e0a230;}
-  .toggle{font-size:.78rem;color:var(--sub);cursor:pointer;user-select:none;border:1px solid var(--line);
-    padding:5px 12px;border-radius:20px;background:#241a0c;}
-  .toggle.on{color:#1c1408;background:var(--amber-l);border-color:var(--amber-l);font-weight:700;}
+  button.cbtn:hover{background:#f7eefb;transform:translateY(-2px);}
+  button.play{width:64px;height:64px;font-size:1.5rem;background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff;border:none;
+    box-shadow:0 6px 18px rgba(184,160,216,.45);}
+  button.play:hover{box-shadow:0 8px 24px rgba(184,160,216,.6);}
+  .toggle{font-size:.78rem;color:var(--sub);cursor:pointer;user-select:none;border:1.5px solid var(--line);
+    padding:5px 12px;border-radius:20px;background:#fff;}
+  .toggle.on{color:#fff;background:linear-gradient(90deg,#cba6e3,#f0a8bf);border-color:transparent;font-weight:700;}
   /* progress */
-  .bar{height:7px;background:#3a2a12;border-radius:6px;margin:14px 0 6px;cursor:pointer;overflow:hidden;}
-  .bar .fill{height:100%;width:0;background:linear-gradient(90deg,var(--amber),var(--amber-l));border-radius:6px;}
+  .bar{height:7px;background:#f0e6f4;border-radius:6px;margin:14px 0 6px;cursor:pointer;overflow:hidden;}
+  .bar .fill{height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--purple));border-radius:6px;}
   .time{display:flex;justify-content:space-between;font-size:.74rem;color:var(--sub);}
   /* layout */
   .grid{display:grid;grid-template-columns:1fr 1.3fr;gap:16px;margin-top:18px;}
   @media(max-width:680px){.grid{grid-template-columns:1fr;}}
-  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;}
-  .panel h3{margin:.1em 0 .6em;font-size:.82rem;color:var(--amber);letter-spacing:.08em;border-bottom:1px solid var(--line);padding-bottom:6px;}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:0 4px 16px rgba(184,160,216,.1);}
+  .panel h3{margin:.1em 0 .6em;font-size:.82rem;color:#b08bc4;letter-spacing:.08em;border-bottom:1px solid var(--line);padding-bottom:6px;}
   ul.list{list-style:none;margin:0;padding:0;max-height:60vh;overflow:auto;}
-  ul.list li{padding:9px 10px;border-radius:8px;cursor:pointer;font-size:.9rem;display:flex;gap:8px;align-items:baseline;transition:.12s;border-left:3px solid transparent;}
-  ul.list li:hover{background:#31240f;}
-  ul.list li.active{background:#3a2a12;border-left-color:var(--amber);color:var(--amber-l);font-weight:700;}
+  ul.list li{padding:9px 10px;border-radius:10px;cursor:pointer;font-size:.9rem;display:flex;gap:8px;align-items:baseline;transition:.12s;border-left:3px solid transparent;}
+  ul.list li:hover{background:#faf0f8;}
+  ul.list li.active{background:#f3e8fa;border-left-color:var(--pink);color:#7a5c84;font-weight:700;}
   ul.list li .n{color:var(--sub);font-size:.78rem;min-width:1.6em;}
   ul.list li .f{margin-left:auto;font-size:.7rem;color:var(--accent);}
-  ul.list li .f.silent{color:#9a7fb0;}
+  ul.list li .f.silent{color:#a08bc8;}
   .lyrics{white-space:pre-wrap;font-size:.95rem;line-height:2;max-height:60vh;overflow:auto;color:var(--ink);}
-  .lyrics.silent{color:#cbb6e0;text-align:center;font-style:italic;padding-top:30px;}
+  .lyrics.silent{color:#9b8ac0;text-align:center;font-style:italic;padding-top:30px;}
   footer{text-align:center;margin-top:30px;font-size:.78rem;color:var(--sub);}
   .hint{text-align:center;font-size:.8rem;color:var(--sub);margin:6px 0 0;}
-  ::-webkit-scrollbar{width:8px;}::-webkit-scrollbar-thumb{background:#4a3a1c;border-radius:8px;}
+  ::-webkit-scrollbar{width:8px;}::-webkit-scrollbar-thumb{background:#d8c4e8;border-radius:8px;}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header>
-  <div class="sub">🎧 ekomo-mai AI studio ／ Cosmic Universe</div>
+  <div class="sub">🌸 ekomo-mai AI studio ／ Cosmic Universe</div>
   <h1>祈りの記憶 — ヒーリング組曲</h1>
   <div class="sub">自動順番再生＆ループ ／ 歌詞表示つき　＊3モード切替：🎤歌入り8曲 ／ 🌌フル巡礼10曲 ／ 🎧歌詞なし10曲</div>
   <div class="sub" style="margin-top:4px">🤴王子(作曲) → 🌙天音(監修) → ⚙️琥珀(実装) → 🌊凪(記録) → 🌸kaori(点火)　＋🐿️くるみ</div>
-  <div class="sub" style="margin-top:4px">🎨 きせかえ：🍯琥珀色 ／ <a href="pastel.html" style="color:#c8a86a">🌸パステル</a> ／ <a href="hoshizora.html" style="color:#c8a86a">🌌星空</a></div>
+  <div class="sub" style="margin-top:4px">🎨 きせかえ：<a href="index.html">琥珀色</a> ／ 🌸パステル ／ <a href="hoshizora.html">星空</a></div>
 </header>
 
 <div class="now">
@@ -350,7 +352,7 @@ Move.
 
 const au = document.getElementById('au');
 const $ = id => document.getElementById(id);
-// 歌詞なし（純インスト）10曲＝「最新」フォルダ
+// 歌詞なし（純インスト）10曲
 const INST = [
   I+"track01.mp3",
   I+"track02.mp3",
@@ -376,7 +378,7 @@ function fmt(t){ if(isNaN(t)) return '0:00'; const m=Math.floor(t/60), s=Math.fl
 const list = $('list');
 tracks.forEach((t,i)=>{
   const li=document.createElement('li');
-  li.innerHTML = `<span class="n">${t.n}</span><span>${t.title}${t.tag?'　<small style="color:#c8a86a">'+t.tag+'</small>':''}</span>`
+  li.innerHTML = `<span class="n">${t.n}</span><span>${t.title}${t.tag?'　<small style="color:#b08bc4">'+t.tag+'</small>':''}</span>`
     + `<span class="f${t.silent?' silent':''}">${t.silent?'🔇 沈黙':'🎤'}</span>`;
   li.onclick = ()=>{ load(i); au.play(); };
   list.appendChild(li);
@@ -447,7 +449,7 @@ au.addEventListener('timeupdate', ()=>{
 });
 au.addEventListener('error', ()=>{
   $('hint').textContent = '⚠ 音源が読み込めないみたい。通信状態を確認して、もう一度再生してみてね。';
-  $('hint').style.color='#e0a230';
+  $('hint').style.color='#c8861d';
 });
 $('bar').onclick = e=>{
   const r=e.currentTarget.getBoundingClientRect();
