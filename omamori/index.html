@@ -801,6 +801,13 @@ function init() {
   const gapDays = lastMet ? Math.floor((today - lastMet) / 86400000) : 0;
   const isOkaeri = lastMet && gapDays >= APP_CONFIG.okaeriGapDays;
 
+  /* ⑥+ ホームの人へ【kaori確定 2026-06-11】──
+     ホームの石を持つ人にだけ、ときどき（約5日に1度）特別な言葉が届く。
+     毎日ではない。「わたしの子、今日もよくやったね」の距離感。 */
+  const homePocket = home ? home.messages.filter(m => m.home) : [];
+  const isHomeDay = homePocket.length > 0 &&
+    (dayOfYear + home.id.length) % APP_CONFIG.homePocketEvery === 0;
+
   if (isBirthday && home) {
     /* ⑦ お誕生日 ── あなたの石が「生まれてきてくれてありがとう」 */
     greeting.textContent = "🎂 今日は、あなたの日。";
@@ -812,6 +819,10 @@ function init() {
     greeting.textContent = "おかえりなさい。";
     const stone = stones[currentIndex];
     renderStone(stone, pickTodayMessage(stone));
+  } else if (isHomeDay) {
+    greeting.textContent = "今日も、ここにいるよ。";
+    const msg = homePocket[Math.floor(dayOfYear / APP_CONFIG.homePocketEvery) % homePocket.length];
+    renderStone(home, msg, "あなたの石から、そっと");
   } else {
     greeting.textContent = "今日も、ここにいるよ。";
     const stone = stones[currentIndex];
