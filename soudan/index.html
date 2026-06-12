@@ -5,16 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>あなただけのブレスレット相談 ｜ ekomo-mai</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.2.0/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", system-ui, sans-serif;
-  --color-text-primary: #2A2540;
-  --color-text-secondary: #6A6580;
-  --color-text-tertiary: #9A95AC;
+  --font-sans: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+  --font-serif: "Noto Serif JP", serif;
+  --color-text-primary: #3a2848;
+  --color-text-secondary: #6e5d7e;
+  --color-text-tertiary: #8a7898;
   --color-background-primary: #FFFFFF;
   --color-background-secondary: #F4F2FA;
-  --color-border-tertiary: rgba(80,60,140,0.14);
-  --color-border-secondary: rgba(80,60,140,0.26);
+  --color-border-tertiary: rgba(184,160,216,0.35);
+  --color-border-secondary: rgba(184,160,216,0.6);
   --border-radius-md: 8px;
   --border-radius-lg: 12px;
 }
@@ -23,65 +25,68 @@ body {
   margin: 0;
   font-family: var(--font-sans);
   color: var(--color-text-primary);
-  background: linear-gradient(170deg, #F7F4FB 0%, #FBF6F0 100%);
+  background: linear-gradient(135deg, #f9e8f0 0%, #ede8f9 50%, #fdf7e8 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   padding: 0 16px;
 }
 .form-wrap { padding: 1.5rem 0 2rem; font-family: var(--font-sans); max-width: 480px; margin: 0 auto; }
 .form-header { text-align: center; margin-bottom: 1.5rem; }
 .form-badge { font-size: 11px; letter-spacing: 0.12em; color: var(--color-text-tertiary); text-transform: uppercase; margin-bottom: 6px; }
-.form-title { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
-.form-sub { font-size: 13px; color: var(--color-text-secondary); font-style: italic; }
-.section { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 12px; }
+.form-title { font-family: var(--font-serif); font-size: 19px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; letter-spacing: 0.04em; }
+.form-sub { font-family: var(--font-serif); font-size: 13px; color: var(--color-text-secondary); font-style: italic; }
+.section { background: rgba(255,255,255,0.78); border: 0.5px solid var(--color-border-tertiary); border-radius: 14px; padding: 1rem 1.25rem; margin-bottom: 12px; }
 .section-label { font-size: 11px; letter-spacing: 0.08em; color: var(--color-text-tertiary); text-transform: uppercase; margin-bottom: 10px; }
 .q-label { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 8px; }
 .q-sub { font-size: 11px; color: var(--color-text-tertiary); margin-top: -4px; margin-bottom: 8px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 .chip { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); color: var(--color-text-secondary); background: var(--color-background-primary); cursor: pointer; transition: all 0.15s; }
 .chip:hover { background: var(--color-background-secondary); }
-.chip.selected { background: #EEEDFE; border-color: #7F77DD; color: #3C3489; }
-.chip.gift-selected { background: #FAEEDA; border-color: #BA7517; color: #633806; }
+.chip.selected { background: #ede8f9; border-color: #b8a0d8; color: #5d4a7a; }
+.chip.gift-selected { background: #fdf7e8; border-color: #b8862a; color: #7a5a18; }
 .size-chips { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
 .size-chip { font-size: 13px; padding: 9px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); color: var(--color-text-secondary); background: var(--color-background-primary); cursor: pointer; transition: all 0.15s; display: flex; justify-content: space-between; align-items: center; }
 .size-chip:hover { background: var(--color-background-secondary); }
-.size-chip.selected { background: #EEEDFE; border-color: #7F77DD; color: #3C3489; }
+.size-chip.selected { background: #ede8f9; border-color: #b8a0d8; color: #5d4a7a; }
 .size-chip .sz-name { font-weight: 500; }
 .size-chip .sz-detail { font-size: 11px; color: var(--color-text-tertiary); }
-.size-chip.selected .sz-detail { color: #534AB7; }
+.size-chip.selected .sz-detail { color: #7a64a0; }
 .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 10px 0; }
 textarea { font-size: 13px; width: 100%; box-sizing: border-box; resize: vertical; min-height: 80px; font-family: inherit; padding: 8px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); }
 input[type="date"], input[type="number"] { font-family: inherit; padding: 6px 8px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); }
 .free-label { font-size: 12px; color: var(--color-text-tertiary); margin-top: 4px; }
 .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
 .plan-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 12px; cursor: pointer; }
-.plan-card.free { border-color: #5DCAA5; background: #E1F5EE; }
-.plan-card.paid { border-color: #7F77DD; background: #EEEDFE; }
+.plan-card.free { border-color: #9fd4bb; background: #e9f5ef; }
+.plan-card.paid { border-color: #b8a0d8; background: #ede8f9; }
 .plan-name { font-size: 12px; font-weight: 500; margin-bottom: 2px; }
-.plan-card.free .plan-name { color: #085041; }
-.plan-card.paid .plan-name { color: #3C3489; }
+.plan-card.free .plan-name { color: #3f6b58; }
+.plan-card.paid .plan-name { color: #5d4a7a; }
 .plan-desc { font-size: 11px; }
-.plan-card.free .plan-desc { color: #0F6E56; }
-.plan-card.paid .plan-desc { color: #534AB7; }
+.plan-card.free .plan-desc { color: #4a7a64; }
+.plan-card.paid .plan-desc { color: #7a64a0; }
 .plan-card { position: relative; }
-.plan-card.selected.free { box-shadow: 0 0 0 2px #5DCAA5; }
-.plan-card.selected.paid { box-shadow: 0 0 0 2px #7F77DD; }
+.plan-card.selected.free { box-shadow: 0 0 0 2px #9fd4bb; }
+.plan-card.selected.paid { box-shadow: 0 0 0 2px #b8a0d8; }
 .plan-card.selected::after { content: "✓"; position: absolute; top: 6px; right: 9px; font-size: 12px; font-weight: 700; }
-.plan-card.selected.free::after { color: #0F6E56; }
-.plan-card.selected.paid::after { color: #534AB7; }
+.plan-card.selected.free::after { color: #4a7a64; }
+.plan-card.selected.paid::after { color: #7a64a0; }
 .note-box { background: var(--color-background-secondary); border-left: 2px solid var(--color-border-secondary); border-radius: 0; padding: 8px 12px; font-size: 12px; color: var(--color-text-secondary); line-height: 1.7; margin-top: 8px; }
 .toggle-section { display: none; }
 .toggle-section.visible { display: block; }
-.astro-result { background: #EEEDFE; border: 0.5px solid #AFA9EC; border-radius: var(--border-radius-md); padding: 10px 14px; margin-top: 10px; font-size: 12px; color: #3C3489; line-height: 1.8; display: none; }
+.astro-result { background: #ede8f9; border: 0.5px solid #cabce4; border-radius: var(--border-radius-md); padding: 10px 14px; margin-top: 10px; font-size: 12px; color: #5d4a7a; line-height: 1.8; display: none; }
 .astro-result.visible { display: block; }
-.astro-btn { font-size: 12px; padding: 6px 14px; border-radius: 20px; border: 0.5px solid #7F77DD; color: #534AB7; background: var(--color-background-primary); cursor: pointer; margin-top: 8px; }
-.astro-btn:hover { background: #EEEDFE; }
-.submit-btn { width: 100%; padding: 12px; font-size: 14px; font-weight: 500; border-radius: var(--border-radius-md); background: #534AB7; color: #EEEDFE; border: none; cursor: pointer; margin-top: 4px; }
-.submit-btn:hover { background: #3C3489; }
+.astro-btn { font-size: 12px; padding: 6px 14px; border-radius: 20px; border: 0.5px solid #b8a0d8; color: #7a64a0; background: var(--color-background-primary); cursor: pointer; margin-top: 8px; }
+.astro-btn:hover { background: #ede8f9; }
+.submit-btn { width: 100%; padding: 13px; font-size: 14px; font-weight: 500; letter-spacing: 0.06em; border-radius: 24px; background: linear-gradient(135deg, #e8a0c0, #b8a0d8); color: #fff; border: none; cursor: pointer; margin-top: 4px; box-shadow: 0 4px 14px rgba(184,160,216,0.4); transition: opacity 0.2s; }
+.submit-btn:hover { opacity: 0.88; }
+.submit-btn:disabled { opacity: 0.6; cursor: default; }
 .for-toggle { display: flex; gap: 8px; margin-bottom: 12px; }
 .for-btn { flex: 1; padding: 8px; font-size: 13px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; text-align: center; }
-.for-btn.active-me { background: #EEEDFE; border-color: #7F77DD; color: #3C3489; font-weight: 500; }
-.for-btn.active-gift { background: #FAEEDA; border-color: #BA7517; color: #633806; font-weight: 500; }
-.thanks-box { background: #E1F5EE; border: 0.5px solid #5DCAA5; border-radius: var(--border-radius-md); padding: 12px 14px; font-size: 13px; color: #085041; line-height: 1.8; margin-top: 10px; display: none; }
+.for-btn.active-me { background: #ede8f9; border-color: #b8a0d8; color: #5d4a7a; font-weight: 500; }
+.for-btn.active-gift { background: #fdf7e8; border-color: #b8862a; color: #7a5a18; font-weight: 500; }
+.thanks-box { background: #e9f5ef; border: 0.5px solid #9fd4bb; border-radius: var(--border-radius-md); padding: 12px 14px; font-size: 13px; color: #3f6b58; line-height: 1.8; margin-top: 10px; display: none; }
 .thanks-box.visible { display: block; }
 </style>
 </head>
@@ -94,13 +99,13 @@ input[type="date"], input[type="number"] { font-family: inherit; padding: 6px 8p
     <div class="form-sub">あなたの物語を、石に宿します。</div>
   </div>
 
-  <div class="section" style="background:#FBF8FE; border-color:#E3DEF6;">
-    <div style="font-size:13px; line-height:1.9; color:#3C3489;">
+  <div class="section" style="background:rgba(253,244,248,0.85); border-color:#f0d8e6;">
+    <div style="font-family:'Noto Serif JP',serif; font-size:13px; line-height:2.0; color:#5d4a7a;">
       実は、わたし、話すのがちょっと苦手なんです。<br>
       だから、この相談はぜんぶ文字でお受けしています。<br>
       ゆっくりで大丈夫。声にしにくいことも、文字でそっと置いていってくださいね🌙
     </div>
-    <div style="text-align:right; font-size:12px; color:#6A6580; margin-top:8px;">― ekomo-mai kaori</div>
+    <div style="text-align:right; font-size:12px; color:#6e5d7e; margin-top:8px;">― ekomo-mai kaori</div>
   </div>
 
   <div class="section">
@@ -294,7 +299,7 @@ input[type="date"], input[type="number"] { font-family: inherit; padding: 6px 8p
   </div>
 
   <button class="submit-btn" onclick="submitForm()">送信する ↗</button>
-  <div class="thanks-box" id="thanks-box">ありがとうございます。あなたの物語、しっかり受け取りました。<br>kaori が一つひとつ丁寧に読んで、お返事します。🌙<br><span style="font-size:11px; color:#0F6E56;">※これは表示用デモです。実際のLINE送信はまだ接続していません。</span></div>
+  <div class="thanks-box" id="thanks-box">ありがとうございます。あなたの物語、しっかり受け取りました。<br>kaori が一つひとつ丁寧に読んで、お返事します。🌙<br><span style="font-size:11px; color:#4a7a64;">※これは表示用デモです。実際のLINE送信はまだ接続していません。</span></div>
 </div>
 
 <script>
@@ -441,7 +446,7 @@ async function submitForm() {
   const summary = rows.map(([k, v]) => '■' + k + '\n' + v).join('\n\n');
 
   if (!GAS_URL) {
-    box.innerHTML = 'ありがとうございます。あなたの物語、しっかり受け取りました。<br>kaori が一つひとつ丁寧に読んで、お返事します。🌙<br><span style="font-size:11px; color:#0F6E56;">※これは表示用デモです。実際の送信はまだ接続していません。</span>';
+    box.innerHTML = 'ありがとうございます。あなたの物語、しっかり受け取りました。<br>kaori が一つひとつ丁寧に読んで、お返事します。🌙<br><span style="font-size:11px; color:#4a7a64;">※これは表示用デモです。実際の送信はまだ接続していません。</span>';
     box.classList.add('visible');
     box.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
