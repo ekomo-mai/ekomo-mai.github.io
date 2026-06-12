@@ -97,6 +97,7 @@ input[type="date"], input[type="number"] { font-family: inherit; padding: 6px 8p
     <div class="form-badge">ekomo-mai</div>
     <div class="form-title">あなただけのブレスレット相談</div>
     <div class="form-sub">あなたの物語を、石に宿します。</div>
+    <div id="prep-badge" style="display:none; margin-top:8px; font-size:11px; color:#8a7898; background:rgba(255,255,255,0.7); border:0.5px dashed #cabce4; border-radius:12px; padding:4px 12px;">🌙 ただいま開店準備中です（送信はまだつながっていません）</div>
   </div>
 
   <div class="section" style="background:rgba(253,244,248,0.85); border-color:#f0d8e6;">
@@ -410,6 +411,9 @@ function selectPlan(el) {
    GAS_URL に kaori の Apps Script ウェブアプリURLを入れると本稼働。
    空のままだとデモ表示（送信はされない）。 */
 const GAS_URL = "";
+document.addEventListener('DOMContentLoaded', () => {
+  if (!GAS_URL) document.getElementById('prep-badge').style.display = 'inline-block';
+});
 
 function collectAnswers() {
   const rows = [];
