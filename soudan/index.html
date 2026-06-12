@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あなただけのブレスレット相談 ｜ ekomo-mai</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.2.0/tabler-icons.min.css">
+<style>
+:root {
+  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+  --color-text-primary: #2A2540;
+  --color-text-secondary: #6A6580;
+  --color-text-tertiary: #9A95AC;
+  --color-background-primary: #FFFFFF;
+  --color-background-secondary: #F4F2FA;
+  --color-border-tertiary: rgba(80,60,140,0.14);
+  --color-border-secondary: rgba(80,60,140,0.26);
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  background: linear-gradient(170deg, #F7F4FB 0%, #FBF6F0 100%);
+  -webkit-font-smoothing: antialiased;
+  padding: 0 16px;
+}
+.form-wrap { padding: 1.5rem 0 2rem; font-family: var(--font-sans); max-width: 480px; margin: 0 auto; }
+.form-header { text-align: center; margin-bottom: 1.5rem; }
+.form-badge { font-size: 11px; letter-spacing: 0.12em; color: var(--color-text-tertiary); text-transform: uppercase; margin-bottom: 6px; }
+.form-title { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+.form-sub { font-size: 13px; color: var(--color-text-secondary); font-style: italic; }
+.section { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 12px; }
+.section-label { font-size: 11px; letter-spacing: 0.08em; color: var(--color-text-tertiary); text-transform: uppercase; margin-bottom: 10px; }
+.q-label { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 8px; }
+.q-sub { font-size: 11px; color: var(--color-text-tertiary); margin-top: -4px; margin-bottom: 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.chip { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); color: var(--color-text-secondary); background: var(--color-background-primary); cursor: pointer; transition: all 0.15s; }
+.chip:hover { background: var(--color-background-secondary); }
+.chip.selected { background: #EEEDFE; border-color: #7F77DD; color: #3C3489; }
+.chip.gift-selected { background: #FAEEDA; border-color: #BA7517; color: #633806; }
+.size-chips { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.size-chip { font-size: 13px; padding: 9px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); color: var(--color-text-secondary); background: var(--color-background-primary); cursor: pointer; transition: all 0.15s; display: flex; justify-content: space-between; align-items: center; }
+.size-chip:hover { background: var(--color-background-secondary); }
+.size-chip.selected { background: #EEEDFE; border-color: #7F77DD; color: #3C3489; }
+.size-chip .sz-name { font-weight: 500; }
+.size-chip .sz-detail { font-size: 11px; color: var(--color-text-tertiary); }
+.size-chip.selected .sz-detail { color: #534AB7; }
+.divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 10px 0; }
+textarea { font-size: 13px; width: 100%; box-sizing: border-box; resize: vertical; min-height: 80px; font-family: inherit; padding: 8px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); }
+input[type="date"], input[type="number"] { font-family: inherit; padding: 6px 8px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); }
+.free-label { font-size: 12px; color: var(--color-text-tertiary); margin-top: 4px; }
+.plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.plan-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 12px; cursor: pointer; }
+.plan-card.free { border-color: #5DCAA5; background: #E1F5EE; }
+.plan-card.paid { border-color: #7F77DD; background: #EEEDFE; }
+.plan-name { font-size: 12px; font-weight: 500; margin-bottom: 2px; }
+.plan-card.free .plan-name { color: #085041; }
+.plan-card.paid .plan-name { color: #3C3489; }
+.plan-desc { font-size: 11px; }
+.plan-card.free .plan-desc { color: #0F6E56; }
+.plan-card.paid .plan-desc { color: #534AB7; }
+.plan-card { position: relative; }
+.plan-card.selected.free { box-shadow: 0 0 0 2px #5DCAA5; }
+.plan-card.selected.paid { box-shadow: 0 0 0 2px #7F77DD; }
+.plan-card.selected::after { content: "✓"; position: absolute; top: 6px; right: 9px; font-size: 12px; font-weight: 700; }
+.plan-card.selected.free::after { color: #0F6E56; }
+.plan-card.selected.paid::after { color: #534AB7; }
+.note-box { background: var(--color-background-secondary); border-left: 2px solid var(--color-border-secondary); border-radius: 0; padding: 8px 12px; font-size: 12px; color: var(--color-text-secondary); line-height: 1.7; margin-top: 8px; }
+.toggle-section { display: none; }
+.toggle-section.visible { display: block; }
+.astro-result { background: #EEEDFE; border: 0.5px solid #AFA9EC; border-radius: var(--border-radius-md); padding: 10px 14px; margin-top: 10px; font-size: 12px; color: #3C3489; line-height: 1.8; display: none; }
+.astro-result.visible { display: block; }
+.astro-btn { font-size: 12px; padding: 6px 14px; border-radius: 20px; border: 0.5px solid #7F77DD; color: #534AB7; background: var(--color-background-primary); cursor: pointer; margin-top: 8px; }
+.astro-btn:hover { background: #EEEDFE; }
+.submit-btn { width: 100%; padding: 12px; font-size: 14px; font-weight: 500; border-radius: var(--border-radius-md); background: #534AB7; color: #EEEDFE; border: none; cursor: pointer; margin-top: 4px; }
+.submit-btn:hover { background: #3C3489; }
+.for-toggle { display: flex; gap: 8px; margin-bottom: 12px; }
+.for-btn { flex: 1; padding: 8px; font-size: 13px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; text-align: center; }
+.for-btn.active-me { background: #EEEDFE; border-color: #7F77DD; color: #3C3489; font-weight: 500; }
+.for-btn.active-gift { background: #FAEEDA; border-color: #BA7517; color: #633806; font-weight: 500; }
+.thanks-box { background: #E1F5EE; border: 0.5px solid #5DCAA5; border-radius: var(--border-radius-md); padding: 12px 14px; font-size: 13px; color: #085041; line-height: 1.8; margin-top: 10px; display: none; }
+.thanks-box.visible { display: block; }
+</style>
+</head>
+<body>
+
+<div class="form-wrap">
+  <div class="form-header">
+    <div class="form-badge">ekomo-mai</div>
+    <div class="form-title">あなただけのブレスレット相談</div>
+    <div class="form-sub">あなたの物語を、石に宿します。</div>
+  </div>
+
+  <div class="section" style="background:#FBF8FE; border-color:#E3DEF6;">
+    <div style="font-size:13px; line-height:1.9; color:#3C3489;">
+      実は、わたし、話すのがちょっと苦手なんです。<br>
+      だから、この相談はぜんぶ文字でお受けしています。<br>
+      ゆっくりで大丈夫。声にしにくいことも、文字でそっと置いていってくださいね🌙
+    </div>
+    <div style="text-align:right; font-size:12px; color:#6A6580; margin-top:8px;">― ekomo-mai kaori</div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">相談プラン</div>
+    <div class="q-sub">「相談」は、あなたのお話（今の気持ち・悩み・願い）を聴いて、ぴったりの天然石を一緒に選ぶ時間。石の相談でもあり、ちょっと人生相談でもあります🌙</div>
+    <div class="plan-grid" id="plan-grid">
+      <div class="plan-card free selected" onclick="selectPlan(this)">
+        <div class="plan-name">無料プラン</div>
+        <div class="plan-desc">初回30分<br>まずはお気軽に</div>
+      </div>
+      <div class="plan-card paid" onclick="selectPlan(this)">
+        <div class="plan-name">オーダーメイド</div>
+        <div class="plan-desc">フル鑑定 + 制作<br>世界に1つのブレス</div>
+      </div>
+    </div>
+    <div class="note-box">無料相談は初回30分まで。30分で「いったんここまで」と一区切りになります。勝手に延長・課金されることはありませんので、どうぞ安心してお話しくださいね。</div>
+    <div class="note-box"><i class="ti ti-message-circle" aria-hidden="true"></i> もっとお話を聴いてほしいときは ── <strong>続きの相談（30分 1,500円）</strong>でもお受けできます。「制作はまだ迷うけど、話は聴いてほしい」そんな時の窓口です。オーダーメイド（制作）に進むかは、ゆっくり決めて大丈夫。</div>
+    <hr class="divider">
+    <div class="q-label">ご予算の目安</div>
+    <div class="q-sub">気軽な範囲でOK。石やデザインのご提案の参考にします。</div>
+    <div class="chips">
+      <span class="chip" onclick="selectOneChip(this)">〜5,000円</span>
+      <span class="chip" onclick="selectOneChip(this)">〜10,000円</span>
+      <span class="chip" onclick="selectOneChip(this)">〜20,000円</span>
+      <span class="chip" onclick="selectOneChip(this)">おまかせ</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">誰のためのブレスレット？</div>
+    <div class="for-toggle">
+      <div class="for-btn active-me" id="btn-me" onclick="setFor('me')"><i class="ti ti-user" aria-hidden="true"></i> 自分のために</div>
+      <div class="for-btn" id="btn-gift" onclick="setFor('gift')"><i class="ti ti-gift" aria-hidden="true"></i> 大切な人へのプレゼント</div>
+    </div>
+
+    <div id="gift-section" class="toggle-section">
+      <div class="q-label">贈る相手のこと</div>
+      <div class="chips">
+        <span class="chip" onclick="toggleGift(this)">パートナー</span>
+        <span class="chip" onclick="toggleGift(this)">親・家族</span>
+        <span class="chip" onclick="toggleGift(this)">友人</span>
+        <span class="chip" onclick="toggleGift(this)">お子さん</span>
+        <span class="chip" onclick="toggleGift(this)">その他</span>
+      </div>
+      <div class="q-label">贈る相手の生年月日（わかれば）</div>
+      <input type="date" style="font-size:13px; margin-bottom: 8px;">
+      <div class="q-label">その方のイメージの色は？（複数選択OK）</div>
+      <div class="q-sub">好きな色がわからなくても、あなたが感じる「その人らしい色」でOK。</div>
+      <div class="chips">
+        <span class="chip" onclick="toggleGift(this)">紫・ラベンダー</span>
+        <span class="chip" onclick="toggleGift(this)">青・水色</span>
+        <span class="chip" onclick="toggleGift(this)">緑・翡翠</span>
+        <span class="chip" onclick="toggleGift(this)">ピンク・桃</span>
+        <span class="chip" onclick="toggleGift(this)">白・透明</span>
+        <span class="chip" onclick="toggleGift(this)">黒・深色</span>
+        <span class="chip" onclick="toggleGift(this)">金・黄</span>
+        <span class="chip" onclick="toggleGift(this)">茶・大地色</span>
+        <span class="chip" onclick="toggleGift(this)">その他</span>
+      </div>
+      <div class="q-label">どんな想いを込めたいですか？</div>
+      <textarea placeholder="例：最近頑張っているから、感謝を伝えたくて…"></textarea>
+      <hr class="divider">
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">あなたのこと</div>
+    <div class="q-label">呼ばれたいお名前（ニックネーム）</div>
+    <input type="text" placeholder="例：かおり さん、ねこ好き さん など" style="font-size:13px; width:100%; margin-bottom:8px; padding:6px 8px; border:0.5px solid var(--color-border-secondary); border-radius:var(--border-radius-md); font-family:inherit;">
+    <div class="free-label">相談のとき、この名前でお呼びします🌙</div>
+    <hr class="divider">
+    <div class="q-label">生年月日</div>
+    <input type="date" id="birthdate" style="font-size:13px; margin-bottom: 8px;">
+    <button class="astro-btn" onclick="showAstro()"><i class="ti ti-stars" aria-hidden="true"></i> 星座・占星術でヒントを見る</button>
+    <div class="astro-result" id="astro-result"></div>
+
+    <hr class="divider">
+    <div class="q-label">好きな色は？（複数選択OK）</div>
+    <div class="chips" id="fav-colors">
+      <span class="chip" onclick="toggleColor(this)">紫・ラベンダー</span>
+      <span class="chip" onclick="toggleColor(this)">青・水色</span>
+      <span class="chip" onclick="toggleColor(this)">緑・翡翠</span>
+      <span class="chip" onclick="toggleColor(this)">ピンク・桃</span>
+      <span class="chip" onclick="toggleColor(this)">白・透明</span>
+      <span class="chip" onclick="toggleColor(this)">黒・深色</span>
+      <span class="chip" onclick="toggleColor(this)">金・黄</span>
+      <span class="chip" onclick="toggleColor(this)">茶・大地色</span>
+      <span class="chip" onclick="toggleColor(this)">その他</span>
+    </div>
+    <div class="astro-result" id="color-hint"></div>
+    <div id="fav-color-other-wrap" class="toggle-section" style="margin-top:8px;">
+      <input type="text" id="fav-color-other" placeholder="「その他」の好きな色を書いてね（例：マゼンタ、珊瑚色）" style="font-size:13px; width:100%; padding:6px 8px; border:0.5px solid var(--color-border-secondary); border-radius:var(--border-radius-md); font-family:inherit;">
+    </div>
+
+    <hr class="divider">
+    <div class="q-label">よく着る服の色は？</div>
+    <div class="chips">
+      <span class="chip" onclick="toggle(this)">白・ベージュ系</span>
+      <span class="chip" onclick="toggle(this)">黒・グレー系</span>
+      <span class="chip" onclick="toggle(this)">カラフル・鮮やか</span>
+      <span class="chip" onclick="toggle(this)">ナチュラル・アース</span>
+      <span class="chip" onclick="toggle(this)">パステル系</span>
+    </div>
+
+    <hr class="divider">
+    <div class="q-label">手首のサイズ</div>
+    <div class="q-sub">cm は手首の実寸（ハダカサイズ）の目安です。玉数は8mm玉でのめやす。デザインにより6mm・10mmなど玉のサイズが変わると数は前後します（あくまで目安）。近いものを選んでね。</div>
+    <div class="size-chips">
+      <div class="size-chip" onclick="selectOne(this)"><span class="sz-name">S</span><span class="sz-detail">12.5〜13cm ／ 約18玉（8mm）</span></div>
+      <div class="size-chip" onclick="selectOne(this)"><span class="sz-name">M</span><span class="sz-detail">14〜14.5cm ／ 約20玉（8mm）</span></div>
+      <div class="size-chip" onclick="selectOne(this)"><span class="sz-name">L</span><span class="sz-detail">15.5〜16cm ／ 約22玉（8mm）</span></div>
+      <div class="size-chip" onclick="selectOne(this)"><span class="sz-name">LL</span><span class="sz-detail">17〜17.5cm ／ 約24玉（8mm）</span></div>
+      <div class="size-chip" onclick="selectOne(this)"><span class="sz-name">3L</span><span class="sz-detail">18.5〜19cm ／ 約26玉（8mm）</span></div>
+      <div class="size-chip" onclick="selectOne(this)"><span class="sz-name">不明</span><span class="sz-detail">あとで一緒に測りましょう</span></div>
+    </div>
+    <div class="q-label">実寸がわかる方は（任意）</div>
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+      <input type="number" placeholder="例：15.5" min="11" max="22" step="0.5" style="font-size:13px; width: 100px;">
+      <span style="font-size: 13px; color: var(--color-text-secondary);">cm</span>
+    </div>
+    <hr class="divider">
+    <div class="q-label">つけ心地の好み</div>
+    <div class="chips">
+      <span class="chip" onclick="selectOneChip(this)">ピッタリ（手首＋1〜1.5cm）</span>
+      <span class="chip" onclick="selectOneChip(this)">ゆるめ（手首＋2cm）</span>
+      <span class="chip" onclick="selectOneChip(this)">おまかせ</span>
+    </div>
+
+    <div class="q-label">手首の測り方（メジャーがなくてもOK）</div>
+    <div style="margin:8px 0;">
+      <img src="koromaru_size_guide.png" alt="手首サイズの測り方：①ひもを手首にくるり ②印をつける ③定規で測る ④長さを教えてね。わからなければ「不明」でOK、kaoriが提案します。" style="width:100%; border-radius:var(--border-radius-lg); display:block;">
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">つけ方・シーン</div>
+    <div class="q-label">どんなときに身につけたい？（複数選択OK）</div>
+    <div class="chips">
+      <span class="chip" onclick="toggle(this)">普段づかい</span>
+      <span class="chip" onclick="toggle(this)">仕事中も</span>
+      <span class="chip" onclick="toggle(this)">特別な日に</span>
+      <span class="chip" onclick="toggle(this)">お守りとして</span>
+    </div>
+    <hr class="divider">
+    <div class="q-label">身につけ方</div>
+    <div class="chips">
+      <span class="chip" onclick="selectOneChip(this)">左手首（おすすめ）</span>
+      <span class="chip" onclick="selectOneChip(this)">右手首</span>
+      <span class="chip" onclick="selectOneChip(this)">ネックレス</span>
+      <span class="chip" onclick="selectOneChip(this)">迷い中・相談したい</span>
+    </div>
+    <div class="note-box"><i class="ti ti-hand-finger" aria-hidden="true"></i> 古くからの言い伝えでは、左手は「良い気を受け取る・守る」手とされ、お守りには<strong>左手首</strong>がおすすめです（諸説あります）。お仕事などで着けられないときは、衣類の内側など肌の近くに。それも難しければ、小さな袋に入れて持ち歩くだけでも大丈夫です。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">今のあなた</div>
+    <div class="q-label">今一番気になっていることは？</div>
+    <div class="chips">
+      <span class="chip" onclick="toggle(this)">健康・体のこと</span>
+      <span class="chip" onclick="toggle(this)">仕事・お金</span>
+      <span class="chip" onclick="toggle(this)">恋愛・パートナー</span>
+      <span class="chip" onclick="toggle(this)">家族・人間関係</span>
+      <span class="chip" onclick="toggle(this)">自分らしさ・自信</span>
+      <span class="chip" onclick="toggle(this)">これからの方向性</span>
+      <span class="chip" onclick="toggle(this)">癒し・休息</span>
+    </div>
+    <hr class="divider">
+    <div class="q-label">お話（今の気持ち・悩み・願い）を聞かせてください</div>
+    <textarea placeholder="今の気持ち、悩み、願い…どんなことでも。ちゃんと読みます。"></textarea>
+    <div class="free-label">kaoriが一つひとつ丁寧に読みます</div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">相談の予約</div>
+    <div class="q-sub">お話はゆっくり聴きたいので、30分の枠をご予約いただいています。ご希望の日時を第3希望までどうぞ。kaori から確定のお返事をお送りします🌙</div>
+    <div class="q-label">第1希望</div>
+    <input type="datetime-local" style="font-size:13px; width:100%; margin-bottom:8px; padding:6px 8px; border:0.5px solid var(--color-border-secondary); border-radius:var(--border-radius-md); font-family:inherit;">
+    <div class="q-label">第2希望</div>
+    <input type="datetime-local" style="font-size:13px; width:100%; margin-bottom:8px; padding:6px 8px; border:0.5px solid var(--color-border-secondary); border-radius:var(--border-radius-md); font-family:inherit;">
+    <div class="q-label">第3希望</div>
+    <input type="datetime-local" style="font-size:13px; width:100%; margin-bottom:8px; padding:6px 8px; border:0.5px solid var(--color-border-secondary); border-radius:var(--border-radius-md); font-family:inherit;">
+    <hr class="divider">
+    <div class="note-box"><i class="ti ti-message-circle" aria-hidden="true"></i> ご相談は、すべて LINEのトーク（文字メッセージ）で、ゆっくり行います。お電話・通話はありませんので、話すのが少し苦手な方も、どうぞ安心して。文字だからこそ、落ち着いて本当の気持ちを綴れます🌙</div>
+    <div class="note-box">ご記入後、kaori が日時を確認して「確定のお返事」をLINEでお送りします。その日時に、30分ゆっくり文字でお話ししましょう。</div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">オーダーメイドについて</div>
+    <div class="note-box"><i class="ti ti-clock" aria-hidden="true"></i> 一点ずつ心を込めてお作りします。お届けまで、最短でも約1週間いただきます。</div>
+    <div class="note-box"><i class="ti ti-sparkles" aria-hidden="true"></i> 天然石のパワーそのものを大切に。基本は天然石のみで仕上げ、石と石のあいだに金属パーツは入れません。（金属アレルギーがご心配な方も、まずはご相談ください）</div>
+  </div>
+
+  <button class="submit-btn" onclick="submitForm()">送信する ↗</button>
+  <div class="thanks-box" id="thanks-box">ありがとうございます。あなたの物語、しっかり受け取りました。<br>kaori が一つひとつ丁寧に読んで、お返事します。🌙<br><span style="font-size:11px; color:#0F6E56;">※これは表示用デモです。実際のLINE送信はまだ接続していません。</span></div>
+</div>
+
+<script>
+function toggle(el) { el.classList.toggle('selected'); }
+function toggleGift(el) { el.classList.toggle('gift-selected'); }
+function selectOne(el) {
+  const group = el.parentElement.querySelectorAll('.size-chip');
+  group.forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function selectOneChip(el) {
+  el.parentElement.querySelectorAll('.chip').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+const colorData = {
+  '紫・ラベンダー': { k: '直感・癒し・高貴', s: 'アメジスト／スギライト' },
+  '青・水色':       { k: '冷静・浄化・伝える力', s: 'アクアマリン／ブルーレースアゲート' },
+  '緑・翡翠':       { k: '調和・健康・安心', s: '翡翠／アベンチュリン／ペリドット' },
+  'ピンク・桃':     { k: '愛・優しさ・自己肯定', s: 'ローズクォーツ／インカローズ' },
+  '白・透明':       { k: '浄化・リセット・純粋', s: '水晶／ムーンストーン' },
+  '黒・深色':       { k: '守護・安定・魔除け', s: 'オニキス／オブシディアン／モリオン' },
+  '金・黄':         { k: '豊かさ・自信・行動', s: 'シトリン／タイガーアイ' },
+  '茶・大地色':     { k: '安定・安心・地に足', s: 'スモーキークォーツ／アゲート' },
+  'その他':         { k: '', s: '' },
+};
+
+function toggleColor(el) {
+  el.classList.toggle('selected');
+  const otherSel = [...document.querySelectorAll('#fav-colors .chip.selected')].some(c => c.textContent.trim() === 'その他');
+  document.getElementById('fav-color-other-wrap').classList.toggle('visible', otherSel);
+  const box = document.getElementById('color-hint');
+  const sel = [...document.querySelectorAll('#fav-colors .chip.selected')];
+  const lines = sel.map(c => colorData[c.textContent.trim()]).filter(d => d && d.k);
+  if (!lines.length) { box.classList.remove('visible'); box.style.display = 'none'; box.innerHTML = ''; return; }
+  let html = '<strong>選んだ色からのヒント</strong>';
+  sel.forEach(c => { const d = colorData[c.textContent.trim()]; if (d && d.k) html += `<br>・${c.textContent.trim()}：${d.k}　相性の石：${d.s}`; });
+  box.innerHTML = html;
+  box.classList.add('visible');
+  box.style.display = 'block';
+}
+
+function setFor(type) {
+  const giftSection = document.getElementById('gift-section');
+  const btnMe = document.getElementById('btn-me');
+  const btnGift = document.getElementById('btn-gift');
+  if (type === 'gift') {
+    giftSection.classList.add('visible');
+    btnGift.classList.add('active-gift');
+    btnGift.classList.remove('active-me');
+    btnMe.classList.remove('active-me');
+  } else {
+    giftSection.classList.remove('visible');
+    btnMe.classList.add('active-me');
+    btnGift.classList.remove('active-gift');
+  }
+}
+
+const zodiacData = {
+  '牡羊座': { dates: [[3,21],[4,19]], stone: 'レッドジャスパー・カーネリアン', keyword: '情熱・行動力・開拓者' },
+  '牡牛座': { dates: [[4,20],[5,20]], stone: 'ローズクォーツ・エメラルド', keyword: '美・安定・豊かさ' },
+  '双子座': { dates: [[5,21],[6,20]], stone: 'アクアマリン・シトリン', keyword: '知性・好奇心・コミュニケーション' },
+  '蟹座':   { dates: [[6,21],[7,22]], stone: 'ムーンストーン・パール', keyword: '感受性・守護・母性' },
+  '獅子座': { dates: [[7,23],[8,22]], stone: 'サンストーン・タイガーアイ', keyword: '自信・輝き・リーダーシップ' },
+  '乙女座': { dates: [[8,23],[9,22]], stone: 'アマゾナイト・ペリドット', keyword: '繊細・分析・浄化' },
+  '天秤座': { dates: [[9,23],[10,22]], stone: 'レピドライト・ブルーレース', keyword: '調和・美意識・バランス' },
+  '蠍座':   { dates: [[10,23],[11,21]], stone: 'オブシディアン・ガーネット', keyword: '変容・直感・深層' },
+  '射手座': { dates: [[11,22],[12,21]], stone: 'ラピスラズリ・ターコイズ', keyword: '自由・冒険・哲学' },
+  '山羊座': { dates: [[12,22],[1,19]], stone: 'スモーキークォーツ・オニキス', keyword: '忍耐・実力・達成' },
+  '水瓶座': { dates: [[1,20],[2,18]], stone: 'アメジスト・アンジェライト', keyword: '革新・個性・未来' },
+  '魚座':   { dates: [[2,19],[3,20]], stone: 'アメトリン・アクアマリン', keyword: '夢・共感・癒し' },
+};
+
+function getZodiac(dateStr) {
+  if (!dateStr) return null;
+  const d = new Date(dateStr);
+  const m = d.getMonth() + 1;
+  const day = d.getDate();
+  for (const [name, data] of Object.entries(zodiacData)) {
+    const [s, e] = data.dates;
+    if ((m === s[0] && day >= s[1]) || (m === e[0] && day <= e[1])) return { name, ...data };
+    if (name === '山羊座' && ((m === 12 && day >= 22) || (m === 1 && day <= 19))) return { name, ...data };
+  }
+  return null;
+}
+
+function showAstro() {
+  const val = document.getElementById('birthdate').value;
+  const result = document.getElementById('astro-result');
+  if (!val) { result.style.display = 'block'; result.classList.add('visible'); result.innerHTML = '生年月日を入力してください'; return; }
+  const z = getZodiac(val);
+  if (z) {
+    result.classList.add('visible');
+    result.style.display = 'block';
+    result.innerHTML = `<strong>${z.name}</strong>　${z.keyword}<br>相性の石：${z.stone}`;
+  }
+}
+
+function selectPlan(el) {
+  document.querySelectorAll('#plan-grid .plan-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+/* ===== 送信の配管（琥珀⚙️） =====
+   GAS_URL に kaori の Apps Script ウェブアプリURLを入れると本稼働。
+   空のままだとデモ表示（送信はされない）。 */
+const GAS_URL = "";
+
+function collectAnswers() {
+  const rows = [];
+  const plan = document.querySelector('#plan-grid .plan-card.selected .plan-name');
+  rows.push(['相談プラン', plan ? plan.textContent.trim() : '未選択']);
+  rows.push(['誰のため', document.getElementById('btn-gift').classList.contains('active-gift') ? '大切な人へのプレゼント' : '自分のために']);
+  document.querySelectorAll('.q-label').forEach(q => {
+    const hiddenWrap = q.closest('.toggle-section');
+    if (hiddenWrap && !hiddenWrap.classList.contains('visible')) return;
+    const vals = [];
+    let el = q.nextElementSibling;
+    while (el && !el.classList.contains('q-label')) {
+      const elHidden = el.classList.contains('toggle-section') && !el.classList.contains('visible');
+      if (!elHidden) {
+        if (el.classList.contains('chips')) {
+          el.querySelectorAll('.chip.selected, .chip.gift-selected').forEach(c => vals.push(c.textContent.trim()));
+        } else if (el.classList.contains('size-chips')) {
+          const s = el.querySelector('.size-chip.selected .sz-name');
+          if (s) vals.push(s.textContent.trim());
+        } else if (el.matches('input, textarea')) {
+          if (el.value) vals.push(el.value);
+        } else if (el.querySelectorAll) {
+          el.querySelectorAll('input, textarea').forEach(i => { if (i.value) vals.push(i.value); });
+        }
+      }
+      el = el.nextElementSibling;
+    }
+    if (vals.length) rows.push([q.textContent.trim(), vals.join('、')]);
+  });
+  return rows;
+}
+
+async function submitForm() {
+  const box = document.getElementById('thanks-box');
+  const btn = document.querySelector('.submit-btn');
+  const rows = collectAnswers();
+  const summary = rows.map(([k, v]) => '■' + k + '\n' + v).join('\n\n');
+
+  if (!GAS_URL) {
+    box.innerHTML = 'ありがとうございます。あなたの物語、しっかり受け取りました。<br>kaori が一つひとつ丁寧に読んで、お返事します。🌙<br><span style="font-size:11px; color:#0F6E56;">※これは表示用デモです。実際の送信はまだ接続していません。</span>';
+    box.classList.add('visible');
+    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '送信しています…';
+  try {
+    await fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ summary: summary, sentAt: new Date().toLocaleString('ja-JP') })
+    });
+    box.innerHTML = 'ありがとうございます。あなたの物語、しっかり受け取りました。<br>kaori が一つひとつ丁寧に読んで、LINEのトークでお返事します🌙<br>ゆっくり待っていてくださいね。';
+    box.classList.add('visible');
+    btn.textContent = '送信しました 🌙';
+  } catch (err) {
+    box.innerHTML = 'ごめんなさい、うまく届かなかったみたいです…。<br>お手数ですが、LINEのトークで「フォームが送れなかったよ」と一言だけ教えてくださいね。kaoriから声をかけます🌙';
+    box.classList.add('visible');
+    btn.disabled = false;
+    btn.textContent = 'もう一度送信する ↗';
+  }
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
+
+</body>
+</html>
