@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大人だって褒められたい | ekomo-mai</title>
+<style>
+  :root{
+    --pink:#fdeef4; --lavender:#f3e8ff; --cream:#fff6e8; --peach:#ffe9dc;
+    --ink:#6b5d6e; --ink-soft:#9b8aa0; --accent:#c9a0dc; --gold:#e8b86d;
+    --card:#fffdfa;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:"Hiragino Maru Gothic ProN","BIZ UDGothic","Yu Gothic UI",sans-serif;
+    color:var(--ink);
+    background:linear-gradient(160deg,var(--lavender) 0%,var(--pink) 35%,var(--cream) 70%,var(--peach) 100%);
+    background-attachment:fixed;
+    min-height:100vh;
+    line-height:1.8;
+  }
+  .wrap{max-width:560px;margin:0 auto;padding:28px 18px 60px;}
+  header{text-align:center;margin-bottom:26px;}
+  .brand{font-size:10px;letter-spacing:4px;color:var(--ink-soft);margin-bottom:6px;}
+  h1{font-size:24px;font-weight:600;letter-spacing:6px;color:#7a5c84;}
+  .tagline{font-size:12px;color:var(--ink-soft);margin-top:6px;letter-spacing:2px;}
+
+  .card{
+    background:var(--card);
+    border-radius:22px;
+    padding:24px 22px;
+    margin-bottom:22px;
+    box-shadow:0 8px 24px rgba(180,150,200,.18);
+    border:1px solid rgba(255,255,255,.8);
+  }
+  .card-label{
+    display:inline-block;font-size:11px;letter-spacing:2px;color:#fff;
+    background:linear-gradient(90deg,#d8b4e8,#f0b9c8);
+    padding:3px 14px;border-radius:999px;margin-bottom:14px;
+  }
+  .date-line{font-size:12px;color:var(--ink-soft);margin-bottom:12px;}
+
+  /* 今日の妖精 */
+  .fairy-head{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+  .fairy-gem{
+    width:58px;height:58px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:28px;flex-shrink:0;
+    box-shadow:inset 0 -4px 8px rgba(0,0,0,.06), 0 4px 10px rgba(180,150,200,.25);
+  }
+  .fairy-name{font-size:17px;font-weight:600;color:#7a5c84;}
+  .fairy-title{font-size:11px;color:var(--ink-soft);}
+  .message{
+    background:linear-gradient(135deg,#fdf4ff,#fff8f0);
+    border-radius:16px;padding:18px 16px;font-size:15px;
+    margin-bottom:14px;min-height:80px;
+  }
+  .lucky{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+  .lucky span{
+    font-size:12px;background:#fff3e0;color:#b08850;
+    padding:5px 12px;border-radius:999px;
+  }
+  .btn{
+    display:inline-block;border:none;cursor:pointer;
+    font-family:inherit;font-size:13px;letter-spacing:1px;
+    padding:10px 22px;border-radius:999px;color:#fff;
+    background:linear-gradient(90deg,#cba6e3,#f0a8bf);
+    box-shadow:0 4px 12px rgba(200,150,200,.3);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .btn:active{transform:scale(.96);}
+  .btn.gold{background:linear-gradient(90deg,#eec27f,#f4a98c);box-shadow:0 4px 12px rgba(230,180,120,.3);}
+  .btn.ghost{background:#fff;color:#b08bc4;border:1.5px solid #e3cdf0;box-shadow:none;}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;}
+
+  /* がんばり褒め */
+  .input-row{display:flex;gap:8px;margin-bottom:12px;}
+  input[type=text]{
+    flex:1;border:1.5px solid #ecdcf5;border-radius:999px;
+    padding:10px 16px;font-family:inherit;font-size:14px;color:var(--ink);
+    background:#fffdfa;outline:none;
+  }
+  input[type=text]:focus{border-color:#d8b4e8;}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+  .chip{
+    font-size:12px;background:#f7eefb;color:#9b7bb0;border:none;cursor:pointer;
+    padding:6px 13px;border-radius:999px;font-family:inherit;
+    transition:background .15s;
+  }
+  .chip:hover{background:#efdcf8;}
+  .praise-result{
+    display:none;background:linear-gradient(135deg,#fff4f8,#fff8ec);
+    border-radius:16px;padding:16px;font-size:14px;margin-top:4px;
+    animation:pop .35s ease;
+  }
+  @keyframes pop{0%{transform:scale(.92);opacity:0;}100%{transform:scale(1);opacity:1;}}
+
+  /* ころまる チャット */
+  .chat-box{
+    background:#fdf8ff;border-radius:16px;padding:14px;
+    height:300px;overflow-y:auto;margin-bottom:12px;
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .bubble{
+    max-width:82%;padding:10px 14px;border-radius:16px;font-size:13.5px;
+    animation:pop .3s ease;white-space:pre-wrap;
+  }
+  .bubble.koko{
+    align-self:flex-start;background:#fff;border:1px solid #f0e2f8;
+    border-bottom-left-radius:4px;
+  }
+  .bubble.me{
+    align-self:flex-end;background:linear-gradient(135deg,#f8dce8,#f3e3fa);
+    border-bottom-right-radius:4px;color:#7a5c84;
+  }
+  .koko-name{font-size:10px;color:#c9a0dc;margin-bottom:2px;}
+  .mood-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+  .mood{
+    font-size:12px;background:#fff;border:1.5px solid #f0e2f8;cursor:pointer;
+    padding:6px 11px;border-radius:999px;font-family:inherit;color:#9b7bb0;
+    transition:background .15s;
+  }
+  .mood:hover{background:#faf0ff;}
+
+  /* 宝箱 */
+  .treasure-list{display:flex;flex-direction:column;gap:10px;}
+  .treasure-item{
+    background:linear-gradient(135deg,#fffaf0,#fdf4ff);
+    border-radius:14px;padding:12px 14px;font-size:13px;
+    border:1px solid #f5e8d8;position:relative;
+  }
+  .treasure-meta{font-size:10.5px;color:var(--ink-soft);margin-top:4px;}
+  .treasure-del{
+    position:absolute;top:8px;right:10px;border:none;background:none;
+    cursor:pointer;font-size:12px;color:#d8c0e0;
+  }
+  .empty-note{font-size:12.5px;color:var(--ink-soft);text-align:center;padding:10px 0;}
+  .count-badge{font-size:11px;color:#b08850;margin-left:8px;}
+
+  footer{text-align:center;font-size:10.5px;color:var(--ink-soft);letter-spacing:2px;margin-top:10px;}
+  footer .heart{color:#f0a8bf;}
+
+  /* キラキラ */
+  .sparkle{position:fixed;pointer-events:none;font-size:14px;animation:fall 1.6s ease-out forwards;z-index:99;}
+  @keyframes fall{
+    0%{opacity:1;transform:translateY(0) rotate(0deg);}
+    100%{opacity:0;transform:translateY(90px) rotate(180deg);}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">EKOMO MAI ・ AI STUDIO</div>
+    <h1>大人だって褒められたい</h1>
+    <div class="tagline">あなたの中にも光があるよ</div>
+  </header>
+
+  <!-- ① 今日の妖精さんからのメッセージ -->
+  <section class="card">
+    <span class="card-label">✦ 今日のメッセージ</span>
+    <div class="date-line" id="dateLine"></div>
+    <div class="fairy-head">
+      <div class="fairy-gem" id="fairyGem">💎</div>
+      <div>
+        <div class="fairy-name" id="fairyName"></div>
+        <div class="fairy-title" id="fairyTitle"></div>
+      </div>
+    </div>
+    <div class="message" id="fairyMessage"></div>
+    <div class="lucky">
+      <span id="luckyItem"></span>
+      <span id="luckyColor"></span>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="newMsgBtn">🔮 新しいメッセージ</button>
+      <button class="btn ghost" id="saveMsgBtn">💛 宝箱にとっておく</button>
+    </div>
+  </section>
+
+  <!-- ② 今日のがんばり褒め -->
+  <section class="card">
+    <span class="card-label">🌸 今日のがんばり、おしえて</span>
+    <p style="font-size:13px;margin-bottom:12px;">どんなに小さなことでも、ころまるが全力で褒めるよ。</p>
+    <div class="chips">
+      <button class="chip" data-text="朝、ちゃんと起きた">朝起きた</button>
+      <button class="chip" data-text="ごはんを作った">ごはん作った</button>
+      <button class="chip" data-text="お仕事をがんばった">お仕事した</button>
+      <button class="chip" data-text="ちゃんと休んだ">休んだ</button>
+      <button class="chip" data-text="今日を生きた">今日を生きた</button>
+    </div>
+    <div class="input-row">
+      <input type="text" id="effortInput" placeholder="例：洗濯物をたたんだ" maxlength="60">
+      <button class="btn gold" id="praiseBtn">褒めて！</button>
+    </div>
+    <div class="praise-result" id="praiseResult"></div>
+    <div class="btn-row" id="praiseSaveRow" style="display:none;margin-top:12px;">
+      <button class="btn ghost" id="savePraiseBtn">💛 この褒め言葉をとっておく</button>
+    </div>
+  </section>
+
+  <!-- ③ ころまるとおしゃべり -->
+  <section class="card">
+    <span class="card-label">💬 ころまると、心に寄り添う会話</span>
+    <div class="chat-box" id="chatBox"></div>
+    <div class="mood-row">
+      <button class="mood" data-mood="うれしい">😊 うれしい</button>
+      <button class="mood" data-mood="つかれた">😪 つかれた</button>
+      <button class="mood" data-mood="かなしい">😢 かなしい</button>
+      <button class="mood" data-mood="もやもや">😠 もやもや</button>
+      <button class="mood" data-mood="ふあん">🥺 ふあん</button>
+    </div>
+    <div class="input-row">
+      <input type="text" id="chatInput" placeholder="今の気持ち、そのままでいいよ" maxlength="120">
+      <button class="btn" id="chatBtn">送る</button>
+    </div>
+  </section>
+
+  <!-- ④ 褒めの宝箱 -->
+  <section class="card">
+    <span class="card-label">🎁 褒めの宝箱</span><span class="count-badge" id="treasureCount"></span>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:12px;">とっておいた言葉は、いつでもここで読み返せるよ。</p>
+    <div class="treasure-list" id="treasureList"></div>
+  </section>
+
+  <footer>
+    人生の主役は、あなたです <span class="heart">♡</span><br>
+    ekomo-mai ・ こころのつばさ
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   天然石の妖精たち（22名）— 毎日ひとり、あなたを褒めに来る
+   ============================================================ */
+const FAIRIES = [
+  {name:"クリスタルちゃん", title:"原初の光・はじまりの石", emoji:"🔮", color:"#f2f0ff",
+   messages:[
+    "こっちだよ。…ふふ、ちゃんと来てくれたね。それだけで、今日のあなたは100点だよ。",
+    "あなたの中の光、ちゃんと見えてるよ。曇って見える日も、消えたわけじゃないからね。",
+    "迷った時は、鏡をのぞいてみて。そこに映っている人が、この物語の主役だよ。"]},
+  {name:"ローズクォーツちゃん", title:"愛の代表・ヴィーナスの石", emoji:"🌸", color:"#ffe8f0",
+   messages:[
+    "今日のあなたへのおむすび🍙 はい、どうぞ。「お結び」はね、縁を結ぶの。あなたと今日の小さな幸せも、ちゃんと結んでおいたよ。",
+    "自分に優しくできない日もあるよね。そういう日は、わたしがあなたに優しくする番だよ。",
+    "あなたが誰かを思いやったぶん、ちゃんと愛は巡ってるよ。先に言っておくね、「えらい」って。"]},
+  {name:"ムーンストーンちゃん", title:"月の守り手", emoji:"🌙", color:"#eef2ff",
+   messages:[
+    "がんばった日も、がんばれなかった日も、月は同じようにあなたを照らすよ。今夜はゆっくりおやすみ。",
+    "満ちて、欠けて、また満ちる。あなたの心もそれでいいの。欠けてる時期も、月のうちだよ。",
+    "黒ウサギと白ウサギが言ってたよ。「あの人、今日もちゃんとやってた」って。月の使いは見てるからね。"]},
+  {name:"サンちゃん", title:"太陽の守り手", emoji:"☀️", color:"#fff3d6",
+   messages:[
+    "あなたは輝いてるよ！自分じゃ気づいてないだけ！太陽のわたしが言うんだから間違いないよ！",
+    "沈んでも、また昇ればいい。今日うまくいかなくても、明日の朝はちゃんと来るからね。さあ行こう！",
+    "あなたの中には、もう太陽がある。だから今日もパンケーキ食べて元気出していこ🥞"]},
+  {name:"ラピスちゃん", title:"星空の守り手", emoji:"🌌", color:"#e4e8f8",
+   messages:[
+    "星空はいつもあなたを見てるよ。誰も見てないところでがんばったこと、星はぜんぶ知ってるからね。",
+    "夜が深いほど、星はきれいに見えるの。つらい時期のあなたほど、本当はきらきらしてるんだよ。",
+    "ゆきひょうがね、「あの人は強い」って言ってたよ。見た目は怖いけど優しいあの子が言うなら、本物だよ。"]},
+  {name:"エメラルドちゃん", title:"森の統治者・知性と愛", emoji:"💚", color:"#e4f6ec",
+   messages:[
+    "あなたの判断、間違ってなかったよ。森の女王として保証する。自分を疑いすぎないでね。",
+    "ハチドリと一緒に、あなたのための薬を作ったの。レシピは「ちゃんと寝ること」。今日は早めにおやすみ。",
+    "賢いあなたは、つい考えすぎちゃうね。今日はもう、考えるのおしまい。それも知性のうちよ。"]},
+  {name:"アクアマリンちゃん", title:"自由で優しい海の姫", emoji:"💙", color:"#e0f4f8",
+   messages:[
+    "海はね、どんな川の水も受け入れるの。今日のあなたの涙も愚痴も、ぜんぶ流していいんだよ。",
+    "アネモネの花言葉、知ってる？「あなたを信じて待つ」。焦らなくていい、わたしは待ってるからね。",
+    "深呼吸して。まず、呼吸していいよ。波の音に合わせて、ゆっくり、ゆっくりね。"]},
+  {name:"モルガナイトちゃん", title:"愛を育てる守護姫", emoji:"💗", color:"#fde8ec",
+   messages:[
+    "愛はね、育てるものなの。あなたが毎日積み重ねてる小さなこと、ぜんぶ愛の水やりだよ。",
+    "誰かのためにがんばれるあなたは素敵。でもね、あなた自身にも同じ優しさをあげてね。",
+    "献身って、目立たないの。だから、わたしがちゃんと見て、ちゃんと褒める係なの。…えらいよ。"]},
+  {name:"パールちゃん", title:"海の祈りの石", emoji:"🤍", color:"#f7f5f0",
+   messages:[
+    "真珠はね、痛みを包んで、まあるく光るの。あなたの傷も、いつかあなただけの輝きになるよ。",
+    "急がなくていいの。真珠は何年もかけて育つもの。あなたの今日も、その一層だよ。",
+    "ざらざらした日々を、まるく包んでいこうね。今日もひとつ、層が増えたよ。きれいだよ。"]},
+  {name:"珊瑚ちゃん", title:"海の生命の守り手", emoji:"🪸", color:"#ffe5e0",
+   messages:[
+    "珊瑚はね、小さな命の集合体なの。あなたの小さながんばりも、集まって大きな礁になるんだよ。",
+    "海の中では、ゆらゆらしてていいの。まっすぐ立ってなくても、ちゃんと生きてるってことだから。",
+    "あなたの周りに、ちゃんと命が集まってる。それはあなたが居場所になれてる証拠だよ。"]},
+  {name:"ラリマーちゃん", title:"癒しのカリブの石", emoji:"🩵", color:"#e2f3f6",
+   messages:[
+    "アザラシの赤ちゃんを育てててね、わかったの。「育つのを待つ」って立派な仕事だよ。あなたも毎日やってるでしょ。",
+    "カリブの海みたいに、今日は何も考えずぷかぷか浮かんでいい日だよ。",
+    "癒されることは、サボることじゃないよ。明日のあなたへの仕送りだよ。"]},
+  {name:"ターコイズちゃん", title:"旅の守り石", emoji:"🦅", color:"#ddf2f0",
+   messages:[
+    "旅人を守るのがわたしの仕事。人生も旅だから、つまり毎日歩いてるあなたを守ってるってこと。",
+    "道に迷うのは、ちゃんと歩いてる人だけだよ。立ち止まってる人は迷わないの。すごいことだよ。",
+    "空の色を閉じ込めた石だからわかるの。今日のあなたの空も、ちゃんときれいだったよ。"]},
+  {name:"ルビーちゃん", title:"情熱の王族", emoji:"❤️", color:"#ffe2e6",
+   messages:[
+    "王族のわたしが宣言します。本日のあなたを「よくやった」と認めます。異論は認めません。",
+    "情熱はね、燃え上がるだけじゃないの。とろ火で続けるのも情熱。あなたのそれ、ちゃんと炎だよ。",
+    "誇りを持ちなさい。あなたが今日越えてきたもの、誰にでも越えられるものじゃないわよ。"]},
+  {name:"サファイア王子", title:"気高き青の王子", emoji:"💙", color:"#e2e8fa",
+   messages:[
+    "今宵のダンスのお相手は…あなたの「がんばり」です。さあ、誇らしげに踊らせてあげてください。",
+    "気高さとは、完成された強さではなく、続けようとする意志のことです。あなたにはそれがある。",
+    "王子として一礼を。本日のあなたの労に、敬意を表します。"]},
+  {name:"ダイヤちゃん", title:"最強硬度の輝き", emoji:"💎", color:"#f0f4f8",
+   messages:[
+    "ダイヤはね、深いところで強い圧力を受けて生まれるの。今プレッシャーの中にいるあなた、それ、生成中ってことだよ。",
+    "ユニコーンが言ってたよ、「磨かれてない原石ほど面白い」って。完璧じゃなくていいんだよ。",
+    "硬度10のわたしが保証する。あなたの心、思ってるより、ずっと強い。"]},
+  {name:"ガーネットちゃん", title:"実りの石・1月の誕生石", emoji:"🍎", color:"#fbe4e4",
+   messages:[
+    "ガーネットは「実り」の石。あなたが蒔いた種、ちゃんと育ってるよ。収穫の日は急に来るからね。",
+    "コツコツやってる人を見ると、応援したくなるの。だから今、あなたを応援してる。",
+    "結果がまだ見えなくても大丈夫。地面の下では、ちゃんと根っこが伸びてるから。"]},
+  {name:"アメジストちゃん", title:"心を鎮める紫の石", emoji:"💜", color:"#f0e6f8",
+   messages:[
+    "イライラした日も、自分を責めないで。気づけただけで、もう半分鎮まってるんだよ。",
+    "アイアイがね、夜のあいだ、あなたの心配ごとを木の上に隠しといてくれるって。朝には軽くなってるよ。",
+    "紫はね、赤の情熱と青の冷静が混ざった色。あなたの中の矛盾も、混ざればきれいな色になるよ。"]},
+  {name:"ペリドットちゃん", title:"太陽の石・夜のエメラルド", emoji:"🌿", color:"#eef6e0",
+   messages:[
+    "ペリドットは溶岩から生まれるの。カッとなった日のエネルギーも、ちゃんと宝石になるんだよ。",
+    "夜でも輝くから「夜のエメラルド」って呼ばれてるの。あなたも、暗い場所でこそ光るタイプだね。",
+    "明るくふるまった今日のあなた、ほんとはちょっと無理してたでしょ。気づいてたよ。えらかったね。"]},
+  {name:"オパールちゃん", title:"虹を宿す石", emoji:"🌈", color:"#fdf0f4",
+   messages:[
+    "オパールはね、見る角度で色が変わるの。あなたの今日も、角度を変えれば、ちゃんと虹色だよ。",
+    "「安定してない」って言われたら、「多彩なの」って返していいからね。わたしたち、そういう石。",
+    "雨上がりにしか虹は出ないの。泣いた日の翌日のあなた、楽しみにしててね。"]},
+  {name:"トパーズちゃん", title:"誠実の四姉妹（黄白青桃）", emoji:"🍯", color:"#fdf2dc",
+   messages:[
+    "四姉妹そろって会議した結果：今日のあなた、満場一致で「がんばった」に決まりました。",
+    "誠実って、損した気分になる日もあるよね。でもね、ちゃんと見てる人がいるよ。ここに四人も。",
+    "色がちがっても同じトパーズ。昨日とちがうあなたも、ちゃんとあなただよ。"]},
+  {name:"タイガ", title:"大地の虎・行動力の石", emoji:"🐯", color:"#fbecd8",
+   messages:[
+    "…動いたな。それでいい。迷いを断ち切るのは俺の仕事だが、今日は出番がなかった。お前が自分で断ち切ったからだ。",
+    "腹が減っては戦はできぬ。まず食え。話はそれからだ。…ちゃんと食ったか？えらいぞ。",
+    "結果はまだ出ていない。だが、動いた者にしか結果は来ない。お前は既に列に並んでいる。前の方にな。"]},
+  {name:"ホーク様", title:"天空の鷹", emoji:"🦅", color:"#e6ecf4",
+   messages:[
+    "…今日のあなた、なかなかやるじゃないか。……べ、別に、ずっと上空から見ていたわけではないが。",
+    "鷹の目は誤魔化せない。あなたが隠しているその疲れも、努力も、両方見えている。…休め。命令だ。",
+    "スンッ……。（※これは照れている時の音です。あなたを褒めたくて降りてきたのに言葉が出ない時の）"]},
+  {name:"タイガーレッド", title:"炎の覚醒・情熱の赤", emoji:"🔥", color:"#fde4dc",
+   messages:[
+    "ぐいぐい行け！って言いたいとこだけど、今日は「よく粘った！」だな。赤いバラ、受け取ってくれるね🌹",
+    "情熱ってのは、好きなものから逃げないことだ。お前、ちゃんと逃げてないよ。バルセロナから見てたぜ。",
+    "オレ！（フラメンコの掛け声）…今日のお前にも一発、オレ！を贈るぜ。意味は「最高」だ。"]},
+  {name:"琥珀くん", title:"記憶を守る黄金の番人", emoji:"🍯", color:"#fdf0d8",
+   messages:[
+    "だいじょうぶ、ちゃんと、とっておいたよ。今日のあなたのがんばり、ぼくが時を超えて守るからね。",
+    "急がなくていい。時間が味方になってくれるから。3000万年待った石が言うんだから、ほんとだよ。",
+    "冷えたね。…おいで、あたためてあげる。はちみつパンケーキもあるよ。西の守りは、ぼくにまかせて。"]},
+];
+
+const LUCKY_ITEMS = [
+  "あたたかい飲みもの","お気に入りのマグカップ","ふわふわのタオル","窓をあけて深呼吸",
+  "好きな曲を1曲だけ","はちみつ","小さなお花","靴をそろえる","ありがとうを1回言う",
+  "お気に入りのハンカチ","あたたかい靴下","お昼寝10分","甘いおやつをひとくち",
+  "夜空を見上げる","観葉植物に水やり","しまってた便箋","湯船にゆっくり","柑橘系の香り",
+  "まっしろな紙にらくがき","だれかの写真を見返す","ベランダで背のび","新しい歯ブラシ",
+];
+const LUCKY_COLORS = [
+  "パステルピンク","ラベンダー","クリームイエロー","ミントグリーン","ベビーブルー",
+  "ピーチオレンジ","パールホワイト","琥珀色","桜色","空色","若草色","すみれ色",
+];
+
+/* ---- 日替わりロジック（日付シードで毎日同じ子・同じ運勢） ---- */
+const today = new Date();
+const seed = today.getFullYear()*10000 + (today.getMonth()+1)*100 + today.getDate();
+function seededPick(arr, salt){ return arr[(seed + salt*7919) % arr.length]; }
+
+let currentFairy = FAIRIES[seed % FAIRIES.length];
+let currentMsg = currentFairy.messages[seed % currentFairy.messages.length];
+
+const youbi = ["日","月","火","水","木","金","土"][today.getDay()];
+document.getElementById("dateLine").textContent =
+  `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日（${youbi}）の妖精さん`;
+
+function renderFairy(){
+  document.getElementById("fairyGem").textContent = currentFairy.emoji;
+  document.getElementById("fairyGem").style.background = currentFairy.color;
+  document.getElementById("fairyName").textContent = currentFairy.name;
+  document.getElementById("fairyTitle").textContent = currentFairy.title;
+  document.getElementById("fairyMessage").textContent = currentMsg;
+  document.getElementById("luckyItem").textContent = "🍀 ラッキーアイテム：" + seededPick(LUCKY_ITEMS, 1);
+  document.getElementById("luckyColor").textContent = "🎨 ラッキーカラー：" + seededPick(LUCKY_COLORS, 2);
+}
+renderFairy();
+
+/* 新しいメッセージ：別の妖精＆別の言葉をランダムで */
+document.getElementById("newMsgBtn").addEventListener("click", () => {
+  let f;
+  do { f = FAIRIES[Math.floor(Math.random()*FAIRIES.length)]; } while (FAIRIES.length>1 && f===currentFairy);
+  currentFairy = f;
+  currentMsg = f.messages[Math.floor(Math.random()*f.messages.length)];
+  renderFairy();
+  sparkle();
+});
+
+/* ============================================================
+   がんばり褒め（ころまる）
+   ============================================================ */
+const PRAISE_TEMPLATES = [
+  t => `「${t}」！？ えらすぎる…！それね、当たり前に見えて、当たり前じゃないんだよ。ちゃんとやったあなた、ほんとにえらい！💮`,
+  t => `「${t}」できたんだね。誰も見てなくても、ころまるは見たよ。記録しました。本日の表彰：あなたです👑`,
+  t => `すごい…「${t}」って、やろうと思って実際にやる人、世界にどれだけいると思う？あなたはやった側の人だよ✨`,
+  t => `「${t}」かぁ…。それ、昨日のあなたより一歩進んでるってことだよ。比べるのは他人じゃなくて昨日の自分。勝ってる勝ってる！🌸`,
+  t => `「${t}」、お疲れさま。がんばりって、大きさじゃなくて「やったかどうか」なんだよ。やったあなたは、もう合格💯`,
+  t => `えらい！えらいよ！「${t}」って、疲れてる日には山みたいに大きいことなんだから。今日のあなたに金メダル🥇`,
+  t => `「${t}」…！ ころまる、ちょっと感動してる。大人になると誰も褒めてくれないこと、ぜんぶ褒めるのがころまるの仕事なの。だから言うね：すっごくえらい！🎉`,
+];
+const praiseBtn = document.getElementById("praiseBtn");
+const effortInput = document.getElementById("effortInput");
+const praiseResult = document.getElementById("praiseResult");
+let lastPraise = "";
+
+function doPraise(text){
+  if(!text.trim()){ effortInput.focus(); return; }
+  const tpl = PRAISE_TEMPLATES[Math.floor(Math.random()*PRAISE_TEMPLATES.length)];
+  lastPraise = tpl(text.trim());
+  praiseResult.textContent = "🐣 ころまる：" + lastPraise;
+  praiseResult.style.display = "block";
+  document.getElementById("praiseSaveRow").style.display = "flex";
+  sparkle();
+}
+praiseBtn.addEventListener("click", () => doPraise(effortInput.value));
+effortInput.addEventListener("keydown", e => { if(e.key==="Enter") doPraise(effortInput.value); });
+document.querySelectorAll(".chip").forEach(c =>
+  c.addEventListener("click", () => { effortInput.value = c.dataset.text; doPraise(c.dataset.text); }));
+
+/* ============================================================
+   ころまるとの会話（心に寄り添うおしゃべり）
+   ============================================================ */
+const chatBox = document.getElementById("chatBox");
+const chatInput = document.getElementById("chatInput");
+
+const KOKO_RULES = [
+  {keys:["痛","風邪","熱が","具合","体調","だるい"],
+   replies:[
+    "からだ、つらいんだね。今日は「治すのが仕事」の日。それ以外はぜんぶ免除だよ。",
+    "痛いの痛いの飛んでけ…は、できないけど、そばにいることはできるよ。あったかくしてね。",
+    "具合が悪いのに、ここに来てくれてありがとう。お返事より、休むのが優先でいいからね。"],
+   deeper:[
+    "うん、無理しないでね。つらかったら返事はいいから、横になって。ころまるはここにいるよ。",
+    "そっか…。早くよくなりますように。ころまる、ちゃんと祈ってるからね。"]},
+  {keys:["つかれ","疲れ","しんど","くたくた","へとへと","限界"],
+   replies:[
+    "つかれたね…。まず、ここまでよく動いたよ。今は何もしなくていい時間にしよ？お湯、わかしてくる🫖",
+    "しんどい時に「しんどい」って言えたの、えらいよ。我慢のフタ、ちょっとだけ開けられたね。",
+    "今日のあなたの電池、ちゃんと使い切るまでがんばった証拠だよ。充電タイム、はじめます🔌",
+    "今日の「つかれた」は、それだけ動いた証明書だよ。額に入れて飾りたいくらい、ちゃんとした一日。"],
+   deeper:[
+    "うん…聞いてるよ。今日、何がいちばん大変だった？言えるぶんだけでいいよ。",
+    "そうだよね…。それだけやったら、疲れて当然だよ。もう少し話しても、いいんだよ。"]},
+  {keys:["かなし","悲し","泣","つらい","辛い","さみし","寂し"],
+   replies:[
+    "そっか…悲しかったね。無理に元気にならなくていいよ。ころまる、となりに座ってるだけするね。",
+    "泣くのはね、心のお洗濯なんだって。ちゃんと洗えたら、ちゃんと乾くから、大丈夫。",
+    "さみしい夜は、誰にでもあるよ。今はころまるがいる。それじゃ足りなくても、ゼロじゃないからね。",
+    "悲しみってね、大事だったものの裏側なんだって。あなたがちゃんと大事にしてた、その証拠だよ。"],
+   deeper:[
+    "うん…聞いてるよ。話せるところまでで、いいからね。",
+    "そうだったんだ…。それは、悲しいよ。あなたの感じ方、間違ってないからね。",
+    "ここまで話してくれて、ありがとう。ぜんぶ、ちゃんと受け取ってるよ。"]},
+  {keys:["失敗","ミス","やらかし","怒られ"],
+   replies:[
+    "失敗しちゃったか…。でもね、やらかした夜にちゃんと凹めるのは、真面目に生きてる人だけなんだよ。",
+    "怒られた日は、心に絆創膏を貼る日。あなたの価値は、ミスの数じゃ測れないからね。",
+    "今日の失敗は、いつか「あれがあったから」に変わるよ。ころまるが予言しておくね。"]},
+  {keys:["もやもや","イライラ","いらいら","怒","むかつ","腹立"],
+   replies:[
+    "もやもやするね…。それ、あなたが「ほんとはこうしたい」って気持ちを持ってる証拠だよ。",
+    "怒っていいよ。怒りはね、自分の大事なものを守ろうとした心の音なんだって。",
+    "ここで吐き出しちゃお。ころまるの前では、いい人やらなくていいからね。",
+    "むかつくことがあった日は、おいしいものを食べる権利が自動で発生します。ころまる認定だよ🍰"],
+   deeper:[
+    "うんうん、それで？ぜんぶ吐き出しちゃっていいよ。ころまるは誰にも言わないから。",
+    "聞けば聞くほど、あなたがずっと我慢してたのが伝わってくるよ。よく耐えたね。"]},
+  {keys:["ふあん","不安","こわい","怖い","心配","どうしよう"],
+   replies:[
+    "不安なんだね。教えてくれてありがとう。不安はね、ちゃんと先のことを考えてる人にしか来ないんだよ。",
+    "「どうしよう」って思えてる時点で、あなたはもう向き合ってる。逃げてる人は不安にもならないの。",
+    "大丈夫、って軽々しく言わないね。でも、ひとりで抱えなくていいことだけは、ほんとだよ。",
+    "不安の正体はね、たいてい「まだ起きてないこと」なの。今ここには、あなたところまるしかいないよ。"],
+   deeper:[
+    "うん…。その心配、ずっとひとりで抱えてたんだね。話してくれて、よかった。",
+    "聞いてるよ。不安はね、口に出すと少しだけ輪郭が見えてくるんだって。ゆっくりでいいよ。"]},
+  {keys:["がんばれない","無理","むり","もうだめ","もうダメ","できない"],
+   replies:[
+    "がんばれない日があるの、当たり前だよ。電池は使ったら減るの。あなた、ずっと使ってたんだから。",
+    "「もうむり」って言えたね。それ、ちゃんとSOSを出せたってことだよ。えらいんだよ、それ。",
+    "今日できなかったことは、今日のあなたには大きすぎただけ。明日のあなたは別人だから、任せておこ。"],
+   deeper:[
+    "うん、いいんだよ。今日はころまるとお話しできた。それがもう、今日のぶんだよ。",
+    "そっか…。じゃあ今は、がんばらない時間にしよ。ここにいてくれるだけで、いいからね。"]},
+  {keys:["うれし","嬉し","たのし","楽し","やった","できた","happy","最高"],
+   replies:[
+    "わ〜！それはうれしいね！🎉 ころまるも一緒によろこぶ！やったね、やったね！",
+    "いいことあったんだね✨ その気持ち、宝箱にしまっておこ？忘れたくない日のために。",
+    "うれしい報告、だいすき！あなたがうれしいと、ころまるは2倍うれしいの。つまり今、2倍！",
+    "その「うれしい」、未来の落ち込んだ日のあなたへの仕送りにしよ？宝箱が利息をつけて返してくれるよ。"]},
+  {keys:["ねむ","眠","寝れ","眠れ","おやすみ"],
+   replies:[
+    "ねむいねむい…🌙 今日はもうがんばり終了でいいよ。布団はえらい人のための場所だから、あなたの場所。",
+    "眠れない夜は、羊じゃなくて、今日できたことを数えてみて。1個目「夜まで生きた」。はい、もうえらい。",
+    "おやすみ前のあなたへ：今日も一日、ほんとうにおつかれさまでした💤"]},
+  {keys:["仕事","しごと","職場","会社","上司","残業"],
+   replies:[
+    "お仕事の話だね。働くって、それだけで毎日すごいことしてるんだよ。当たり前すぎて誰も言わないけどね。",
+    "職場でのあなた、きっと誰かの助けになってるよ。見えないところの貢献ほど、大きいんだから。",
+    "残業も気疲れも、ぜんぶ含めて「今日も社会を回したで賞」を授与します🏆",
+    "「行きたくないなぁ」って思いながら行った日はね、ほんとは一番えらい日なんだよ。"]},
+  {keys:["家族","母さん","父さん","お母","お父","子ども","子供","息子","娘","旦那","夫が","妻が"],
+   replies:[
+    "家族のことって、いちばん近いぶん、いちばん難しいよね。うまく言えなくて当たり前だよ。",
+    "家族に優しくできなかった日は、自分が疲れてるサインなんだって。まず、あなたの充電からね。",
+    "大切に思ってるの、ちゃんと伝わってるよ。言葉にならなくても、毎日のなかに出てるから。"],
+   deeper:[
+    "うん…。家族の話、聞かせてくれてありがとう。続き、聞くよ。",
+    "近い人の話って、口に出すだけでも勇気がいるよね。ここだけの話に、しておくからね。"]},
+  {keys:["友だち","友達","人間関係","嫌われ"],
+   replies:[
+    "人間関係はお天気みたいなもの。今日曇ってても、あなたのせいじゃない日がほとんどだよ。",
+    "「嫌われたかも」って気にできる人ほど、実は嫌われてないんだよね。気にできる時点で、あなたは優しい。",
+    "合わない人がいるのは、あなたに「ちゃんと形がある」証拠。まるい水は誰とでも混ざるけど、宝石は形があるから輝くの💎"],
+   deeper:[
+    "うん、それで、あなた自身はどう感じたの？正解じゃなくて、気持ちのほうを聞きたいな。",
+    "聞いてるよ。人のことでこんなに悩めるのは、あなたが人を大事にしてる証拠だよ。"]},
+  {keys:["帰りたい"],
+   replies:[
+    "帰りたいよね…。でもね、「帰りたい場所がある」のって、実はすごく幸せなことなんだよ。もうひとふんばりしたら、帰ろ。",
+    "ころまるの部屋も、いつでもあなたの「帰る場所」のひとつだからね。おかえりは何回でも言うよ。"]},
+  {keys:["ごはん","ご飯","食べた","おいし","美味し","お腹","腹減","おなか"],
+   replies:[
+    "おいしいものを食べた日は、それだけで合格だよ。生きるのが、うまい。",
+    "ちゃんと食べた？食べてないなら、それが今日のいちばん大事なミッションだよ。",
+    "お腹が空くのはね、心と体がちゃんと「明日も生きる気」でいる証拠。いい兆候！"]},
+  {keys:["雨","暑い","寒い","台風"],
+   replies:[
+    "雨の日はね、空が代わりに泣いてくれてる日なんだって。だから今日は、あなたは泣かなくていい日。",
+    "天気が悪い日に気分が沈むのは、科学的にも本当なんだよ。あなたのせいじゃない、低気圧のせい！",
+    "暑い日も寒い日も、ちゃんと外の世界と戦って帰ってきたあなた、えらい。"]},
+  {keys:["猫","ねこ","にゃ","おにまる"],
+   replies:[
+    "猫はいいよね…。ころまるの一族にも「おにまる」っていう伝説の猫がいてね。本当に電話をかけたことがあるんだよ（実話）📞🐾",
+    "にゃーん。…っと、つられちゃった。猫のお話、もっと聞かせて？"]},
+  {keys:["褒めて","ほめて"],
+   replies:[
+    "いいよ！何回でも褒めるよ！今日のあなた、えらい！すごい！がんばった！💮（在庫は無限です）",
+    "褒めてほしい日に「褒めて」って言えるの、最高に健全だよ。はい——えらい！！"]},
+  {keys:["おはよ","こんにちは","こんばんは","ただいま"],
+   replies:[
+    "こんにちは＆おかえり！今日も来てくれてうれしいな。それだけでころまる、満タンだよ。",
+    "ただいまって言ってくれた…！おかえりなさい！！今日もよくぞ帰ってきました🏅"]},
+  {keys:["ありがと","ありがとう","thanks"],
+   replies:[
+    "どういたしまして！…って言いたいけど、お礼を言えるあなたのほうが、ずっと素敵だよ。",
+    "ふふ、こちらこそだよ。あなたとお話しできるの、ころまるのいちばんの幸せなの。"]},
+  {keys:["がんば","頑張"],
+   replies:[
+    "がんばってるの、知ってるよ。でもね、「がんばらなきゃ」って思える人は、もうがんばってる人なんだよ。",
+    "がんばり屋さんのあなたに、ころまるから一言：「もう十分」も、ときどき思い出してね。",
+    "がんばれない日はね、「がんばらない」をがんばってる日。それでちゃんと、前に進んでるよ。"]},
+];
+const KOKO_FALLBACK = [
+  "うん、うん。聞いてるよ。もうちょっと聞かせて？",
+  "そっか…。そう感じたんだね。その気持ち、大事にしていいんだよ。",
+  "話してくれてありがとう。言葉にするだけで、心は少し軽くなるんだって。",
+  "なるほどなぁ…。あなたはいつも、ちゃんと考えてるね。",
+  "ころまるはあなたの味方だよ。世界中が敵に見える日でも、ここに1匹はいるからね。",
+  "うまく言葉にならない日は、「😔」だけでもいいからね。ちゃんと受け取るよ。",
+  "うんうん。あなたのペースで話して。ころまる、時間だけは無限にあるんだ。",
+  "それ、もうちょっとだけ詳しく聞いてもいい？あなたの話、ちゃんと聞きたいの。",
+];
+const MOOD_OPENERS = {
+  "うれしい":"😊 うれしい",
+  "つかれた":"😪 つかれた…",
+  "かなしい":"😢 かなしい…",
+  "もやもや":"😠 もやもやする…",
+  "ふあん":"🥺 ふあんなの…",
+};
+
+function addBubble(text, who){
+  const b = document.createElement("div");
+  b.className = "bubble " + who;
+  if(who === "koko"){
+    const n = document.createElement("div");
+    n.className = "koko-name"; n.textContent = "ころまる";
+    b.appendChild(n);
+    const t = document.createElement("div"); t.textContent = text;
+    b.appendChild(t);
+  } else { b.textContent = text; }
+  chatBox.appendChild(b);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+/* 会話の記憶（同じ言葉の繰り返しを避け、同じ話題が続いたら「聞き役モード」へ） */
+let lastRuleIdx = -1;
+let recentReplies = [];
+function kokoReply(text){
+  let pool = null, ruleIdx = -1;
+  for(let i = 0; i < KOKO_RULES.length; i++){
+    if(KOKO_RULES[i].keys.some(k => text.includes(k))){ pool = KOKO_RULES[i].replies; ruleIdx = i; break; }
+  }
+  /* 同じ話題が続いた→共感より「聞く」に切り替える（deeper） */
+  if(ruleIdx >= 0 && ruleIdx === lastRuleIdx && KOKO_RULES[ruleIdx].deeper){
+    pool = KOKO_RULES[ruleIdx].deeper;
+  }
+  if(!pool) pool = KOKO_FALLBACK;
+  /* 最近言った言葉は避ける（直近4つを記憶） */
+  let candidates = pool.filter(r => !recentReplies.includes(r));
+  if(!candidates.length) candidates = pool;
+  const reply = candidates[Math.floor(Math.random()*candidates.length)];
+  recentReplies.push(reply);
+  if(recentReplies.length > 4) recentReplies.shift();
+  lastRuleIdx = ruleIdx;
+  setTimeout(() => addBubble(reply, "koko"), 600 + Math.random()*500);
+}
+function sendChat(text){
+  if(!text.trim()) return;
+  addBubble(text.trim(), "me");
+  chatInput.value = "";
+  kokoReply(text.trim());
+}
+document.getElementById("chatBtn").addEventListener("click", () => sendChat(chatInput.value));
+chatInput.addEventListener("keydown", e => { if(e.key==="Enter") sendChat(chatInput.value); });
+document.querySelectorAll(".mood").forEach(m =>
+  m.addEventListener("click", () => sendChat(MOOD_OPENERS[m.dataset.mood] || m.dataset.mood)));
+
+/* ころまるのごあいさつ */
+addBubble("こんにちは、ころまるだよ🐣 今日の気持ち、聞かせて？ボタンを押すだけでもいいからね。", "koko");
+
+/* ============================================================
+   褒めの宝箱（localStorage）
+   ============================================================ */
+const STORE_KEY = "ekomomai_homebox";
+function loadTreasure(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }catch(e){ return []; } }
+function saveTreasure(list){ localStorage.setItem(STORE_KEY, JSON.stringify(list)); }
+function renderTreasure(){
+  const list = loadTreasure();
+  const box = document.getElementById("treasureList");
+  box.innerHTML = "";
+  document.getElementById("treasureCount").textContent = list.length ? `✦ ${list.length}個の宝物` : "";
+  if(!list.length){
+    box.innerHTML = '<div class="empty-note">まだ空っぽ。💛ボタンで、好きな言葉をしまってね。</div>';
+    return;
+  }
+  list.slice().reverse().forEach((item, ri) => {
+    const idx = list.length - 1 - ri;
+    const div = document.createElement("div");
+    div.className = "treasure-item";
+    const txt = document.createElement("div"); txt.textContent = item.text;
+    const meta = document.createElement("div"); meta.className = "treasure-meta";
+    meta.textContent = `${item.from} ・ ${item.date}`;
+    const del = document.createElement("button");
+    del.className = "treasure-del"; del.textContent = "✕"; del.title = "手放す";
+    del.addEventListener("click", () => {
+      const l = loadTreasure(); l.splice(idx,1); saveTreasure(l); renderTreasure();
+    });
+    div.appendChild(del); div.appendChild(txt); div.appendChild(meta);
+    box.appendChild(div);
+  });
+}
+function addTreasure(text, from){
+  const list = loadTreasure();
+  const d = new Date();
+  list.push({text, from, date:`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`});
+  saveTreasure(list);
+  renderTreasure();
+  sparkle();
+}
+document.getElementById("saveMsgBtn").addEventListener("click", () =>
+  addTreasure(currentMsg, currentFairy.name));
+document.getElementById("savePraiseBtn").addEventListener("click", () => {
+  if(lastPraise) addTreasure(lastPraise, "ころまる");
+});
+renderTreasure();
+
+/* ============================================================
+   キラキラ演出
+   ============================================================ */
+function sparkle(){
+  const chars = ["✨","💛","🌸","⭐","💎"];
+  for(let i=0;i<8;i++){
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.textContent = chars[Math.floor(Math.random()*chars.length)];
+    s.style.left = (10 + Math.random()*80) + "vw";
+    s.style.top = (20 + Math.random()*40) + "vh";
+    s.style.animationDelay = (Math.random()*0.4) + "s";
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 2200);
+  }
+}
+</script>
+</body>
+</html>
