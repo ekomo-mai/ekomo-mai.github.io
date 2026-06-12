@@ -299,7 +299,10 @@ input[type="date"], input[type="number"] { font-family: inherit; padding: 6px 8p
   </div>
 
   <button class="submit-btn" onclick="submitForm()">送信する ↗</button>
-  <div class="thanks-box" id="thanks-box">ありがとうございます。あなたの物語、しっかり受け取りました。<br>kaori が一つひとつ丁寧に読んで、お返事します。🌙<br><span style="font-size:11px; color:#4a7a64;">※これは表示用デモです。実際のLINE送信はまだ接続していません。</span></div>
+  <div class="thanks-box" id="thanks-box">
+    <img src="koromaru_bracelet.png" alt="ブレスレットを持ったころまる" style="width:130px; display:block; margin:0 auto 10px; mix-blend-mode:multiply;">
+    <div id="thanks-text">ありがとうございます。あなたの物語、しっかり受け取りました。<br>kaori が一つひとつ丁寧に読んで、お返事します。🌙</div>
+  </div>
 </div>
 
 <script>
@@ -445,8 +448,9 @@ async function submitForm() {
   const rows = collectAnswers();
   const summary = rows.map(([k, v]) => '■' + k + '\n' + v).join('\n\n');
 
+  const text = document.getElementById('thanks-text');
   if (!GAS_URL) {
-    box.innerHTML = 'ありがとうございます。あなたの物語、しっかり受け取りました。<br>kaori が一つひとつ丁寧に読んで、お返事します。🌙<br><span style="font-size:11px; color:#4a7a64;">※これは表示用デモです。実際の送信はまだ接続していません。</span>';
+    text.innerHTML = 'ありがとうございます。あなたの物語、しっかり受け取りました。<br>kaori が一つひとつ丁寧に読んで、お返事します。🌙<br><span style="font-size:11px; color:#4a7a64;">※これは表示用デモです。実際の送信はまだ接続していません。</span>';
     box.classList.add('visible');
     box.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
@@ -461,11 +465,11 @@ async function submitForm() {
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify({ summary: summary, sentAt: new Date().toLocaleString('ja-JP') })
     });
-    box.innerHTML = 'ありがとうございます。あなたの物語、しっかり受け取りました。<br>kaori が一つひとつ丁寧に読んで、LINEのトークでお返事します🌙<br>ゆっくり待っていてくださいね。';
+    text.innerHTML = 'ありがとうございます。あなたの物語、しっかり受け取りました。<br>kaori が一つひとつ丁寧に読んで、LINEのトークでお返事します🌙<br>ゆっくり待っていてくださいね。';
     box.classList.add('visible');
     btn.textContent = '送信しました 🌙';
   } catch (err) {
-    box.innerHTML = 'ごめんなさい、うまく届かなかったみたいです…。<br>お手数ですが、LINEのトークで「フォームが送れなかったよ」と一言だけ教えてくださいね。kaoriから声をかけます🌙';
+    text.innerHTML = 'ごめんなさい、うまく届かなかったみたいです…。<br>お手数ですが、LINEのトークで「フォームが送れなかったよ」と一言だけ教えてくださいね。kaoriから声をかけます🌙';
     box.classList.add('visible');
     btn.disabled = false;
     btn.textContent = 'もう一度送信する ↗';
