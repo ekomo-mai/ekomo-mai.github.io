@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ようこそ、ekomo-maiへ</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.2.0/tabler-icons.min.css">
+<style>
+:root {
+  --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+  --color-text-primary: #2A2540;
+  --color-text-secondary: #6A6580;
+  --color-text-tertiary: #9A95AC;
+  --color-background-primary: #FFFFFF;
+  --color-background-secondary: #F4F2FA;
+  --color-border-tertiary: rgba(80,60,140,0.14);
+  --color-border-secondary: rgba(80,60,140,0.26);
+  --color-accent: #534AB7;
+  --color-accent-soft: #EEEDFE;
+  --color-accent-text: #3C3489;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  background: linear-gradient(170deg, #F7F4FB 0%, #FBF6F0 100%);
+  -webkit-font-smoothing: antialiased;
+  padding: 0 16px;
+}
+.wrap { padding: 1.5rem 0 2.5rem; max-width: 480px; margin: 0 auto; }
+
+/* ヘッダー */
+.header { text-align: center; margin-bottom: 1.25rem; }
+.badge { font-size: 11px; letter-spacing: 0.12em; color: var(--color-text-tertiary); text-transform: uppercase; margin-bottom: 6px; }
+.title { font-size: 19px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+.sub { font-size: 13px; color: var(--color-text-secondary); font-style: italic; }
+
+/* 共通カード */
+.card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.1rem 1.25rem; margin-bottom: 12px; }
+.card-label { font-size: 11px; letter-spacing: 0.08em; color: var(--color-text-tertiary); text-transform: uppercase; margin-bottom: 10px; }
+
+/* kaoriの手紙 */
+.letter { background:#FBF8FE; border-color:#E3DEF6; }
+.letter-body { font-size:13px; line-height:1.95; color:#3C3489; }
+.letter-sign { text-align:right; font-size:12px; color:#6A6580; margin-top:10px; }
+
+/* メニュー（玄関のボタン） */
+.menu { display:flex; flex-direction:column; gap:10px; }
+.menu-btn { display:flex; align-items:center; gap:12px; text-decoration:none; padding:14px 16px; border-radius:var(--border-radius-md); border:0.5px solid var(--color-border-secondary); background:var(--color-background-primary); cursor:pointer; transition:all 0.15s; }
+.menu-btn:hover { background:var(--color-accent-soft); border-color:#7F77DD; }
+.menu-ico { font-size:22px; line-height:1; flex-shrink:0; }
+.menu-text { flex:1; }
+.menu-title { font-size:14px; font-weight:500; color:var(--color-text-primary); }
+.menu-desc { font-size:11px; color:var(--color-text-tertiary); margin-top:2px; }
+.menu-arrow { color:var(--color-text-tertiary); font-size:16px; }
+
+/* 準備中バナー（GAS未接続のあいだだけ自動表示） */
+.prep-badge { display:none; font-size:11px; line-height:1.6; color:#8a7898; background:rgba(255,255,255,0.7); border:0.5px dashed #cabce4; border-radius:12px; padding:6px 12px; margin-bottom:12px; }
+
+/* なんでも窓口 */
+.sapo-intro { display:flex; gap:12px; align-items:flex-start; margin-bottom:14px; }
+.sapo-img { width:64px; height:64px; border-radius:50%; flex-shrink:0; object-fit:contain; background:var(--color-accent-soft); }
+.sapo-speech { font-size:12.5px; line-height:1.8; color:var(--color-text-secondary); background:var(--color-background-secondary); border-radius:var(--border-radius-md); padding:10px 12px; position:relative; }
+.sapo-name { font-size:10px; color:var(--color-text-tertiary); margin-bottom:4px; letter-spacing:0.04em; }
+
+.mode-toggle { display:flex; gap:8px; margin-bottom:12px; }
+.mode-btn { flex:1; padding:12px 8px; font-size:13px; border-radius:var(--border-radius-md); border:0.5px solid var(--color-border-secondary); background:var(--color-background-primary); color:var(--color-text-secondary); cursor:pointer; text-align:center; line-height:1.5; }
+.mode-btn.active-ask { background:var(--color-accent-soft); border-color:#7F77DD; color:var(--color-accent-text); font-weight:500; }
+.mode-btn.active-talk { background:#FBF2F6; border-color:#C77BA0; color:#8A3F66; font-weight:500; }
+.mode-emoji { font-size:18px; display:block; margin-bottom:2px; }
+
+.mode-panel { display:none; }
+.mode-panel.visible { display:block; }
+.mode-lead { font-size:12px; line-height:1.75; color:var(--color-text-secondary); background:var(--color-background-secondary); border-left:2px solid var(--color-border-secondary); padding:8px 12px; margin-bottom:10px; }
+.field-label { font-size:13px; font-weight:500; color:var(--color-text-primary); margin-bottom:6px; }
+input[type="text"], textarea { font-size:13px; width:100%; box-sizing:border-box; font-family:inherit; padding:8px; border:0.5px solid var(--color-border-secondary); border-radius:var(--border-radius-md); margin-bottom:10px; }
+textarea { resize:vertical; min-height:90px; }
+.reply-check { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--color-text-secondary); margin-bottom:10px; cursor:pointer; }
+.reply-check input { width:16px; height:16px; accent-color:var(--color-accent); }
+
+.send-btn { width:100%; padding:12px; font-size:14px; font-weight:500; border-radius:var(--border-radius-md); background:var(--color-accent); color:var(--color-accent-soft); border:none; cursor:pointer; transition:opacity 0.2s; }
+.send-btn:hover { background:#3C3489; }
+.send-btn:disabled { opacity:0.6; cursor:default; }
+
+/* FAQ */
+.faq-item { border-bottom:0.5px solid var(--color-border-tertiary); }
+.faq-item:last-child { border-bottom:none; }
+.faq-q { width:100%; text-align:left; background:none; border:none; padding:12px 0; font-size:13px; font-weight:500; color:var(--color-text-primary); cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:8px; font-family:inherit; }
+.faq-q .chev { color:var(--color-text-tertiary); transition:transform 0.2s; flex-shrink:0; }
+.faq-q.open .chev { transform:rotate(180deg); }
+.faq-a { display:none; font-size:12.5px; line-height:1.85; color:var(--color-text-secondary); padding:0 0 12px; }
+.faq-a.open { display:block; }
+.faq-a .sapo-line { color:#8A3F66; }
+
+.faq-fallback { font-size:12px; line-height:1.8; color:var(--color-text-secondary); background:#FBF8FE; border:0.5px solid #E3DEF6; border-radius:var(--border-radius-md); padding:10px 12px; margin-top:12px; }
+
+/* おひねり */
+.tip { background:#FBF8FE; border-color:#E3DEF6; }
+.tip-intro { font-size:12.5px; line-height:1.85; color:var(--color-text-secondary); margin-bottom:14px; }
+.tip-intro .sapo-line { color:#8A3F66; }
+.tip-grid { display:flex; flex-direction:column; gap:8px; }
+.tip-card { display:flex; align-items:center; gap:10px; padding:11px 14px; border-radius:var(--border-radius-md); border:0.5px solid var(--color-border-secondary); background:var(--color-background-primary); cursor:pointer; text-decoration:none; transition:all 0.15s; }
+.tip-card:hover { background:var(--color-accent-soft); border-color:#7F77DD; }
+.tip-emoji { font-size:18px; }
+.tip-name { flex:1; font-size:13px; color:var(--color-text-primary); }
+.tip-price { font-size:13px; font-weight:500; color:var(--color-accent-text); }
+.tip-foot { font-size:11px; color:var(--color-text-tertiary); text-align:center; margin-top:12px; line-height:1.7; }
+
+/* 送信後のお礼（デモ） */
+.thanks { display:none; background:#FBF2F6; border:0.5px solid #C77BA0; border-radius:var(--border-radius-md); padding:14px; font-size:13px; color:#8A3F66; line-height:1.85; margin-top:10px; text-align:center; }
+.thanks.visible { display:block; }
+.demo-note { font-size:11px; color:var(--color-text-tertiary); display:block; margin-top:8px; }
+
+/* おひねりお礼の絵（金額ごとに飛び出す） */
+.tip-thanks-img { width:180px; max-width:70%; height:auto; display:block; margin:0 auto 10px; border-radius:var(--border-radius-md); }
+.thanks.visible .tip-thanks-img { animation: tipPop 0.5s cubic-bezier(.34,1.56,.64,1); }
+@keyframes tipPop {
+  0%   { transform: scale(0.3) translateY(24px); opacity:0; }
+  60%  { transform: scale(1.06) translateY(0); opacity:1; }
+  100% { transform: scale(1) translateY(0); }
+}
+
+.footer { text-align:center; font-size:11px; color:var(--color-text-tertiary); margin-top:8px; line-height:1.8; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ヘッダー -->
+  <div class="header">
+    <div class="badge">ekomo-mai</div>
+    <div class="title">ようこそ、ekomo-mai へ 🌙</div>
+    <div class="sub">ekomo-mai は、ハワイ語で「ようこそ」</div>
+  </div>
+
+  <!-- kaoriの手紙 -->
+  <div class="card letter">
+    <div class="letter-body">
+      ここは、天然石とヒーリングの小さな世界です。<br>
+      あなたの物語を聴いて、心を込めて世界にひとつだけのブレスレットをお作りしています。<br><br>
+      実は、わたし、話すのがちょっと苦手なんです。<br>
+      だから、ご相談もお問い合わせも、ぜんぶ文字でお受けしています。<br>
+      ゆっくりで大丈夫。声にしにくいことも、文字でそっと置いていってくださいね🌙
+    </div>
+    <div class="letter-sign">― ekomo-mai kaori</div>
+  </div>
+
+  <!-- 玄関メニュー -->
+  <div class="card">
+    <div class="card-label">どちらへ進みますか？</div>
+    <div class="menu">
+      <a class="menu-btn" href="../soudan/">
+        <span class="menu-ico">🌙</span>
+        <span class="menu-text">
+          <span class="menu-title">ブレスレットの相談をする</span>
+          <span class="menu-desc">じっくり聴かせてください。世界にひとつをお作りします</span>
+        </span>
+        <span class="menu-arrow"><i class="ti ti-chevron-right"></i></span>
+      </a>
+      <a class="menu-btn" href="#madoguchi">
+        <span class="menu-ico">💬</span>
+        <span class="menu-text">
+          <span class="menu-title">ちょっと聞いてみる・伝える</span>
+          <span class="menu-desc">質問でも、感想でも、ひとりごとでも。なんでも窓口</span>
+        </span>
+        <span class="menu-arrow"><i class="ti ti-chevron-right"></i></span>
+      </a>
+      <a class="menu-btn" href="https://ekomaikaori.base.shop/" target="_blank" rel="noopener">
+        <span class="menu-ico">💎</span>
+        <span class="menu-text">
+          <span class="menu-title">作品を見る</span>
+          <span class="menu-desc">BASE・Etsy のお店へ</span>
+        </span>
+        <span class="menu-arrow"><i class="ti ti-chevron-right"></i></span>
+      </a>
+      <a class="menu-btn" href="#faq">
+        <span class="menu-ico">🐱</span>
+        <span class="menu-text">
+          <span class="menu-title">よくある質問・お支払いについて</span>
+          <span class="menu-desc">おにまるサポちゃんがご案内します</span>
+        </span>
+        <span class="menu-arrow"><i class="ti ti-chevron-right"></i></span>
+      </a>
+    </div>
+  </div>
+
+  <!-- なんでも窓口 -->
+  <div class="card" id="madoguchi">
+    <div class="card-label">なんでも窓口</div>
+    <div class="prep-badge" id="prep-badge">🌙 ただいま準備中です（「なんでも窓口」はまだつながっていません。もうしばらくお待ちくださいね）</div>
+    <div class="sapo-intro">
+      <img class="sapo-img" src="onimaru_sapo.png" alt="おにまるサポちゃん">
+      <div class="sapo-speech">
+        <div class="sapo-name">🐱 おにまるサポちゃんより</div>
+        はじめまして、にゃ🌙 どんな気持ちで来てくれた？　好きなほうでいいよ🐾
+      </div>
+    </div>
+
+    <div class="mode-toggle">
+      <button class="mode-btn active-ask" id="mode-ask" onclick="setMode('ask')">
+        <span class="mode-emoji">🔮</span>聞きたいことがある
+      </button>
+      <button class="mode-btn" id="mode-talk" onclick="setMode('talk')">
+        <span class="mode-emoji">🌙</span>ただ、聞いてほしい
+      </button>
+    </div>
+
+    <!-- 聞きたい -->
+    <div class="mode-panel visible" id="panel-ask">
+      <div class="mode-lead">気になること、なんでも聞いてね。kaori がちゃんとお返事するにゃ🌙</div>
+      <div class="field-label">お名前（ニックネームでOK）</div>
+      <input type="text" id="ask-name" placeholder="例：ねこ好き さん">
+      <div class="field-label">聞いてみたいこと</div>
+      <textarea id="ask-msg" placeholder="ご質問でも、ふと思ったことでも。なんでも置いていってくださいね🌙"></textarea>
+    </div>
+
+    <!-- 聞いてほしい -->
+    <div class="mode-panel" id="panel-talk">
+      <div class="mode-lead">うまくまとめなくて大丈夫。思ったことを、そのまま置いていってね。答えがほしいわけじゃなくても、ちゃんと受け止めるよ🐾</div>
+      <div class="field-label">お名前（ニックネームでOK）</div>
+      <input type="text" id="talk-name" placeholder="例：月の さん">
+      <div class="field-label">いま、心にあること</div>
+      <textarea id="talk-msg" placeholder="どんなことでも。そのままの言葉で。"></textarea>
+      <label class="reply-check"><input type="checkbox" id="talk-reply"> お返事が欲しいときは、ここにチェックしてね🌙</label>
+    </div>
+
+    <button class="send-btn" onclick="sendMadoguchi()">そっと送る ↗</button>
+    <div class="thanks" id="madoguchi-thanks"></div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="card" id="faq">
+    <div class="card-label">よくある質問　🐱 おにまるサポちゃんがお答えするにゃ</div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">これっていくらかかるの？<i class="ti ti-chevron-down chev"></i></button>
+      <div class="faq-a">ご相談は<strong>無料</strong>だよ🌙 ブレスはお話のあと、ご予算に合わせてご提案するにゃ。むりに買わなくて大丈夫🐾</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">電話で話すの？緊張しちゃう…<i class="ti ti-chevron-down chev"></i></button>
+      <div class="faq-a">ぜんぶ文字でやりとりするから安心してにゃ🌙 声を出さなくて大丈夫。<br><span class="sapo-line">……ここだけの話、kaori も話すの苦手だから文字なんだって🐾（笑）</span></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">石のこと全然わからないけど大丈夫？<i class="ti ti-chevron-down chev"></i></button>
+      <div class="faq-a">むしろそれでOK🌙 kaori が一緒に選ぶから、知識はいらないにゃ。「なんとなく気になる」だけで十分だよ🐾</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">相談したら、絶対買わなきゃダメ？<i class="ti ti-chevron-down chev"></i></button>
+      <div class="faq-a">ぜんぜん大丈夫🐾 話すだけ、聞くだけでもOKだよ。<br><span class="sapo-line">kaori は「売る人」じゃなくて「聞く人」だからにゃ🌙</span></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">すぐ作ってもらえる？<i class="ti ti-chevron-down chev"></i></button>
+      <div class="faq-a">一点ずつ心を込めて作るから、お届けまで最短で約1週間みてね🌙 待つ時間も、ふくまれてるにゃ🐾</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">お支払いはどうやるの？<i class="ti ti-chevron-down chev"></i></button>
+      <div class="faq-a">ご相談のあと、デザインと金額が決まったら、専用ページのリンクをLINEでお送りするにゃ🌙 クレジットカード・コンビニ払い・銀行振込・Amazon Pay が使えるよ🐾</div>
+    </div>
+
+    <div class="faq-fallback">
+      🐱 ここに無いことや、むずかしいことは──<br>
+      「それはサポちゃんよりkaori が直接お話したほうがいいやつにゃ🌙」<br>
+      上の<strong>なんでも窓口</strong>から送ってくれたら、ちゃんとkaori からお返事させるね🐾
+    </div>
+  </div>
+
+  <!-- おひねり -->
+  <div class="card tip">
+    <div class="card-label">おにまるのお昼代　🐱</div>
+    <div class="tip-intro">
+      ここまで読んでくれて、ありがとうにゃ🌙<br>
+      もし「おにまるにおやつでも」って思ってくれたら、ちょっとだけ甘えさせてもらうにゃ🐾<br>
+      <span class="sapo-line">（でも、ぜんぜん気にしないでね。気持ちだけで、もう嬉しいから💗）</span>
+    </div>
+    <div class="tip-grid">
+      <a class="tip-card" href="#" onclick="return tip('200')">
+        <span class="tip-emoji">🐟</span><span class="tip-name">ちゅ〜る1本ぶん</span><span class="tip-price">¥200</span>
+      </a>
+      <a class="tip-card" href="#" onclick="return tip('500')">
+        <span class="tip-emoji">🍚</span><span class="tip-name">ごはん大盛り</span><span class="tip-price">¥500</span>
+      </a>
+      <a class="tip-card" href="#" onclick="return tip('1000')">
+        <span class="tip-emoji">🎁</span><span class="tip-name">おにまるへの特別なおやつ</span><span class="tip-price">¥1,000</span>
+      </a>
+    </div>
+    <div class="thanks" id="tip-thanks">
+      <img class="tip-thanks-img" id="tip-thanks-img" src="" alt="お礼のおにまるサポちゃん">
+      <div id="tip-thanks-msg"></div>
+      <span class="demo-note">※ただいま準備中です。本番は BASE の「おにまるのお昼代」ページにつながります。</span>
+    </div>
+    <div class="tip-foot">無料相談は、ずっと無料です。これは「気持ちの行き場」として、そっと置いているだけ🌙</div>
+  </div>
+
+  <div class="footer">
+    ekomo-mai ／ あなたの中にも、光があるよ。
+  </div>
+
+</div>
+
+<script>
+function setMode(mode) {
+  const ask = document.getElementById('mode-ask');
+  const talk = document.getElementById('mode-talk');
+  const pAsk = document.getElementById('panel-ask');
+  const pTalk = document.getElementById('panel-talk');
+  if (mode === 'ask') {
+    ask.classList.add('active-ask'); talk.classList.remove('active-talk');
+    pAsk.classList.add('visible'); pTalk.classList.remove('visible');
+  } else {
+    talk.classList.add('active-talk'); ask.classList.remove('active-ask');
+    pTalk.classList.add('visible'); pAsk.classList.remove('visible');
+  }
+}
+function toggleFaq(btn) {
+  btn.classList.toggle('open');
+  const a = btn.nextElementSibling;
+  a.classList.toggle('open');
+}
+
+/* ===== なんでも窓口 送信の配管（琥珀⚙️） =====
+   GAS_URL に kaori の Apps Script ウェブアプリURLを入れると本稼働。
+   空のままだと準備中バナー＋デモ表示（送信はされない）。
+   相談フォームと同じGAS（doPost: summary を受け取りシート追記＋メール通知）でそのまま動く。 */
+const GAS_URL = "";
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (!GAS_URL) document.getElementById('prep-badge').style.display = 'block';
+});
+
+function currentMode() {
+  return document.getElementById('mode-talk').classList.contains('active-talk') ? 'talk' : 'ask';
+}
+
+// 窓口の中身を、相談フォームと同じ「■見出し＋本文」テキストに整える
+function collectMadoguchi() {
+  const mode = currentMode();
+  const rows = [];
+  rows.push(['窓口の種類', mode === 'ask' ? '🔮 聞きたいことがある' : '🌙 ただ、聞いてほしい']);
+  if (mode === 'ask') {
+    rows.push(['お名前', document.getElementById('ask-name').value || '（未記入）']);
+    rows.push(['聞いてみたいこと', document.getElementById('ask-msg').value || '（未記入）']);
+    rows.push(['お返事希望', 'はい（質問のため）']);
+  } else {
+    rows.push(['お名前', document.getElementById('talk-name').value || '（未記入）']);
+    rows.push(['いま、心にあること', document.getElementById('talk-msg').value || '（未記入）']);
+    rows.push(['お返事希望', document.getElementById('talk-reply').checked ? 'はい（お返事ほしい）' : 'いいえ（聞いてくれるだけでいい）']);
+  }
+  return '【なんでも窓口】\n\n' + rows.map(function(r){ return '■' + r[0] + '\n' + r[1]; }).join('\n\n');
+}
+
+async function sendMadoguchi() {
+  const box = document.getElementById('madoguchi-thanks');
+  const btn = document.querySelector('.send-btn');
+  const summary = collectMadoguchi();
+
+  if (!GAS_URL) {
+    box.innerHTML = 'ありがとう。あなたの言葉、ちゃんと受け取ったにゃ🌙<br>kaori が読んで、お返事させてもらうね🐾'
+      + '<span class="demo-note">※ただいま準備中です。実際の送信はまだつながっていません。</span>';
+    box.classList.add('visible');
+    box.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '送っています…';
+  try {
+    await fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ summary: summary, sentAt: new Date().toLocaleString('ja-JP') })
+    });
+    box.innerHTML = 'ありがとう。あなたの言葉、ちゃんと受け取ったにゃ🌙<br>kaori が読んで、LINEのトークでお返事させてもらうね🐾';
+    box.classList.add('visible');
+    btn.textContent = '送りました 🌙';
+  } catch (err) {
+    box.innerHTML = 'ごめんなさい、うまく届かなかったみたい…。<br>お手数だけど、LINEのトークで「窓口が送れなかったよ」と教えてくださいね。kaori から声をかけます🌙';
+    box.classList.add('visible');
+    btn.disabled = false;
+    btn.textContent = 'もう一度送る ↗';
+  }
+  box.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+// おひねり：金額ごとに違う「おにまるサポちゃんのお礼の絵」を出す（③でBASEにつなぐ）
+var TIP_THANKS = {
+  '200':  { img:'tip_200.png',  msg:'ちゅ〜る1本ぶん、ありがとにゃ！<br>お腹に「ありがとっ」て出ちゃったにゃ🐟💗' },
+  '500':  { img:'tip_500.png',  msg:'ごはん大盛りにゃ〜！！<br>しゃもじ振り上げて、しあわせ〜っにゃ🍚✨' },
+  '1000': { img:'tip_1000.png', msg:'うぅ……MAXにゃ……🥹<br>感きわまって涙でちゃったにゃ。ほんとにありがとうにゃ💗🐾' }
+};
+function tip(amount) {
+  var d = TIP_THANKS[amount];
+  if (!d) return false;
+  var box = document.getElementById('tip-thanks');
+  var img = document.getElementById('tip-thanks-img');
+  document.getElementById('tip-thanks-msg').innerHTML = d.msg;
+  img.src = d.img;
+  box.classList.remove('visible');
+  void box.offsetWidth;
+  box.classList.add('visible');
+  box.scrollIntoView({ behavior:'smooth', block:'center' });
+  return false;
+}
+</script>
+</body>
+</html>
